@@ -7,7 +7,7 @@ function App() {
         <p>Welcome to the back water of the internet</p>
         <a
           className='App-link'
-          href='https://google.com'
+          href='https://www.youtube.com/watch?v=ZZ5LpwO-An4?autoplay=1'
         >Go back to google</a>
       </header>
     </div>

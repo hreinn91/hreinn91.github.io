@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom"
 import './index.css';
@@ -9,15 +9,18 @@ import App from './mainpage/App';
 import BeerSpace from './beerspace/BeerSpace';
 import reportWebVitals from './reportWebVitals';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <App />,
+    children: [
+
+    ]
   },
   {
-    path: "beerspace",
-    element: <BeerSpace/>
-  }
+    path: "/beerspace",
+    element: <BeerSpace />
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
