@@ -28,18 +28,16 @@ const Freddy = () => {
     }
 
     // Function to print the location of the cursor
-    const printCursorPosition = (e) => {
+    const handleMouseClick = (e) => {
+        setX(e.clientX);
         console.log(`Cursor Position - X: ${e.clientX}, Y: ${e.clientY}`);
     };
 
-    // useEffect to add and remove the event listener
     useEffect(() => {
-        // Add event listener when the component mounts
-        window.addEventListener('click', printCursorPosition);
-
-        // Remove event listener when the component unmounts
+        console.log('Tic');
+        window.addEventListener('click', handleMouseClick);
         return () => {
-            window.removeEventListener('click', printCursorPosition);
+            window.removeEventListener('click', handleMouseClick);
         };
     }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
