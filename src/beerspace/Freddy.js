@@ -6,35 +6,42 @@ let i = 0;
 
 const Freddy = () => {
 
-    const [scaleFactor, setScaleFactor] = useState(0.5);
+    const [scaleFactor, setScaleFactor] = useState(0.3);
     const [isFlipped, setIsFlipped] = useState(-1)
-    const [x, setX] = useState(100);
-    const [y, setY] = useState(100);
-    const [dx, setDX] = useState(1);
-    const [rotation, setRotation] = useState(0);
+    const [x, setX] = useState(200);
+    const [y, setY] = useState(200);
+    const [vx, setVX] = useState(0);
+    const [vy, setVY] = useState(0);
+    const [angle, setAngle] = useState(0);
+    const [nx, setNX] = useState(-1);
+    const [ny, setNY] = useState(-1);
 
-    const moveX = () => {
-        if(x > 300){
-            setDX(-1);
-            setRotation(rotation + Math.PI * 0.5);
-            // setIsFlipped(isFlipped * -1);
-        }
-        if(x < 100){
-            setDX(1);
-            // setRotation(rotation + Math.PI * 0.5);
-            // setIsFlipped(isFlipped * -1);
-        }
-        setX(x + dx);
-    }
+    const move = () => {
+        setX(x + vx);
+        setY(y + vy);
+    };
 
-    // Function to print the location of the cursor
+    const handleRotation = (dx, dy) => {
+        let newAngle = Math.atan2(dy, dx);
+        let isFlipped = -1;
+        console.log(` newAngle ${(newAngle * 180) / Math.PI}`);
+        
+        if(newAngle < -0.5 * Math.PI || newAngle > 0.5 * Math.PI){
+            isFlipped = 1;
+            newAngle = newAngle - Math.PI;
+        }
+
+        setAngle(newAngle);
+        setIsFlipped(isFlipped);
+    };
+
     const handleMouseClick = (e) => {
-        setX(e.clientX);
-        console.log(`Cursor Position - X: ${e.clientX}, Y: ${e.clientY}`);
+        const dx = e.clientX - x;
+        const dy = e.clientY - y;
+        handleRotation(dx, dy);
     };
 
     useEffect(() => {
-        console.log('Tic');
         window.addEventListener('click', handleMouseClick);
         return () => {
             window.removeEventListener('click', handleMouseClick);
@@ -44,19 +51,13 @@ const Freddy = () => {
 
     useTick(delta => {
         i += 0.05 * delta;
-
-        // moveX();
-        
-        // setX(Math.sin(i) * 100 + 150); // Adjusted to keep the sprite within the container
-        // setY(Math.sin(i / 1.5) * 100 + 150); // Same here
-        // setRotation(-10 + Math.sin(i / 10 + Math.PI * 2) * 10);
-        // setRotation(rotation + 10);
+        move();
     });
 
     return (<Sprite
         image={freddyImage}
         scale={[isFlipped * scaleFactor, scaleFactor]}
-        rotation={rotation}
+        rotation={angle}
         x={x}
         y={y}
         anchor={{ x: 0.5, y: 0.5 }}
