@@ -28,7 +28,7 @@ export const GameComponent = () => {
 function BeerSpace() {
   return (
     <div>
-      <p>See bunny bellow</p>
+      <p>See Freddy bellow</p>
       <GameComponent />
     </div>);
 }
