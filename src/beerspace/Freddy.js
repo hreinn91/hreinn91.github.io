@@ -4,7 +4,7 @@ import freddyImage from '../assets/freddy-head.png';
 
 let i = 0;
 
-const Freddy = () => {
+const Freddy = ({ clickEvent, beerPosition, incrementBeer }) => {
     const [scaleFactor, setScaleFactor] = useState(0.3);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [x, setX] = useState(200);
@@ -25,41 +25,48 @@ const Freddy = () => {
     const handleRotation = (dx, dy) => {
         let newAngle = Math.atan2(dy, dx);
         let isFlipped = -1;
-        
+
         if(newAngle < -0.5 * Math.PI || newAngle > 0.5 * Math.PI){
             isFlipped = 1;
             newAngle = newAngle - Math.PI;
         }
-
         setAngle(newAngle);
         setIsFlipped(isFlipped);
     };
-
-    const handleMouseClick = (e) => {
-        const rect = e.target.getBoundingClientRect(); // Get the bounding rectangle of the target element
-        const dx = e.clientX - rect.left - x;
-        const dy = e.clientY - rect.top - y;
-        setTargetX(e.clientX - rect.left); // Update target x position
-        setTargetY(e.clientY - rect.top); // Update target y position
+    const handleMouseClick = (clickEvent) => {
+        if(clickEvent.x == -1){
+            return;
+        }
+        const dx = clickEvent.x - clickEvent.rectLeft - x;
+        const dy = clickEvent.y - clickEvent.rectTop - y;
+        setTargetX(clickEvent.x - clickEvent.rectLeft);
+        setTargetY(clickEvent.y - clickEvent.rectTop);
         handleRotation(dx, dy);
         
-        // Calculate the velocity to move Freddy towards the clicked position
-        // The speed can be adjusted by changing the divisor
-        const speed = 0.02; // Speed modifier
+        const speed = 0.02;
         setVX(speed * dx);
         setVY(speed * dy);
     };
 
+    const checkForScore = () => {
+        const dx = x - beerPosition.x;
+        const dy = y - beerPosition.y;
+        if(dx*dx + dy*dy < 150){
+            console.log(`Score`);
+            incrementBeer();
+        }
+        // console.log(`beerPosition ${beerPosition.x} ${beerPosition.y} ${x}  ${y} `)
+    };
+
     useEffect(() => {
-        window.addEventListener('click', handleMouseClick);
-        return () => {
-            window.removeEventListener('click', handleMouseClick);
-        };
-    }, [x, y]); // Add x and y to the dependency array to update the event listener with the current positions
+        handleMouseClick(clickEvent);
+    }, [clickEvent]);
+
 
     useTick(delta => {
         i += 0.05 * delta;
         move();
+        checkForScore();
     });
 
     return (<Sprite
