@@ -4,7 +4,7 @@ import freddyImage from '../assets/freddy-head.png';
 
 let i = 0;
 
-const Freddy = ({ clickEvent, beerPosition, incrementBeer }) => {
+const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft }) => {
     const [scaleFactor, setScaleFactor] = useState(0.3);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [x, setX] = useState(200);
@@ -48,14 +48,17 @@ const Freddy = ({ clickEvent, beerPosition, incrementBeer }) => {
         setVY(speed * dy);
     };
 
-    const checkForScore = () => {
-        const dx = x - beerPosition.x;
-        const dy = y - beerPosition.y;
-        if(dx*dx + dy*dy < 150){
-            console.log(`Score`);
-            incrementBeer();
+    const checkScore = () => {
+        checkCollision(beer.x, beer.y, incrementBeer);
+        checkCollision(lyft.x, lyft.y, incremenLyft);
+    };
+
+    const checkCollision = (targetX, targetY, trigger) => {
+        const dx = x - targetX;
+        const dy = y - targetY;
+        if(dx*dx + dy*dy < 490){
+            trigger();
         }
-        // console.log(`beerPosition ${beerPosition.x} ${beerPosition.y} ${x}  ${y} `)
     };
 
     useEffect(() => {
@@ -66,7 +69,7 @@ const Freddy = ({ clickEvent, beerPosition, incrementBeer }) => {
     useTick(delta => {
         i += 0.05 * delta;
         move();
-        checkForScore();
+        checkScore();
     });
 
     return (<Sprite

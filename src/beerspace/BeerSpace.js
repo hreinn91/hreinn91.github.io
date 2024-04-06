@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Stage, Container, Text, Sprite } from '@pixi/react';
 import Freddy from './Freddy';
 import lapinKulta from '../assets/lapin-kulta.png';
+import lyftImage from '../assets/lyft-citrus.png';
+
 
 const ScoreHeader = ({ score }) => {
 
@@ -20,11 +22,10 @@ export const GameComponent = () => {
     rectTop: -1,
   });
   const [score, setScore] = useState(0);
-  const [lapinKultaPosition, setLapinKultaPosition] = useState({ x: 300, y: 300 });
+  const [beer, setBeer] = useState({ x: 300, y: 300, width: 0, height: 0 });
+  const [lyft, setLyft] = useState({ x: -100, y: -100, isSpawned: -1 });
 
-  // Function to handle click anywhere on the Stage
   const handleStageClick = (e) => {
-    // console.log(`${lapinKultaPosition.x} ${lapinKultaPosition.y} - ${e.clientX} ${e.clientY} `);
     const rect = e.target.getBoundingClientRect();
     setClickEvent({
       x: e.clientX,
@@ -34,13 +35,46 @@ export const GameComponent = () => {
     });
   };
 
-  const incrementScoreAndUpdateBeer = () => {
+  const incrementBeer = () => {
     setScore((prevScore) => prevScore + 1);
-    setLapinKultaPosition({
-      x: Math.random() * (gameWidth - 40) + 20, // Ensure lapinKulta stays within bounds
+    setBeerPosition();
+  };
+
+  const setBeerPosition = () => {
+    setBeer({
+      x: Math.random() * (gameWidth - 40) + 20,
       y: Math.random() * (gameHeight - 40) + 20,
     });
   };
+
+  const incrementLyft = () => {
+    despawnLyft();
+    setScore((prevScore) => prevScore + 10);
+  }; 
+
+  const spawnLyft = () => {
+    setLyft({
+      isSpawned: 1,
+      x: Math.random() * (gameWidth - 40) + 20,
+      y: Math.random() * (gameHeight - 40) + 20,
+    });
+  };
+
+  const despawnLyft = () => {
+    setLyft({
+      isSpawned: -1,
+      x: -500,
+      y: -500,
+    });
+  };
+
+  useEffect(() => {
+    if (score > 1) {
+      if (lyft.isSpawned == -1 && Math.random() > 0.9) {
+        spawnLyft();
+      }
+    }
+  }, [score]);
 
   return (
     <div>
@@ -51,14 +85,23 @@ export const GameComponent = () => {
         <Sprite
           image={lapinKulta}
           scale={0.04}
-          x={lapinKultaPosition.x}
-          y={lapinKultaPosition.y}
+          x={beer.x}
+          y={beer.y}
           anchor={{ x: 0.5, y: 0.5 }}
+        />
+        <Sprite
+          image={lyftImage}
+          x={lyft.x}
+          y={lyft.y}
+          scale={0.06}
+          anchor={0.5}
         />
         <Freddy
           clickEvent={clickEvent}
-          beerPosition={lapinKultaPosition}
-          incrementBeer={incrementScoreAndUpdateBeer}
+          beer={beer}
+          incrementBeer={incrementBeer}
+          lyft={lyft}
+          incremenLyft={incrementLyft}
         />
       </Stage>
     </div>
