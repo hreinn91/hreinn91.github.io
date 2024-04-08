@@ -12,11 +12,11 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft }) => {
     const [vx, setVX] = useState(0);
     const [vy, setVY] = useState(0);
     const [angle, setAngle] = useState(0);
-    const [targetX, setTargetX] = useState(200); // Target x position
-    const [targetY, setTargetY] = useState(200); // Target y position
+    const [targetX, setTargetX] = useState(200);
+    const [targetY, setTargetY] = useState(200);
 
     const move = () => {
-        if (Math.abs(x - targetX) > 1 || Math.abs(y - targetY) > 1) { // Check if Freddy is close to the target
+        if (Math.abs(x - targetX) > 1 || Math.abs(y - targetY) > 1) {
             setX(x + vx);
             setY(y + vy);
         }
@@ -58,7 +58,9 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft }) => {
         const dy = y - targetY;
         if(dx*dx + dy*dy < 490){
             trigger();
+            return true;
         }
+        return false;
     };
 
     useEffect(() => {

@@ -13,8 +13,10 @@ const ScoreHeader = ({ score }) => {
 
 
 export const GameComponent = () => {
-  const gameWidth = 400;
-  const gameHeight = 600;
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: 400,
+    height: 600
+  });
   const [clickEvent, setClickEvent] = useState({
     x: -1,
     y: -1,
@@ -42,8 +44,8 @@ export const GameComponent = () => {
 
   const setBeerPosition = () => {
     setBeer({
-      x: Math.random() * (gameWidth - 40) + 20,
-      y: Math.random() * (gameHeight - 40) + 20,
+      x: getInBoundValue(windowDimensions.width),
+      y: getInBoundValue(windowDimensions.height),
     });
   };
 
@@ -55,9 +57,16 @@ export const GameComponent = () => {
   const spawnLyft = () => {
     setLyft({
       isSpawned: 1,
-      x: Math.random() * (gameWidth - 40) + 20,
-      y: Math.random() * (gameHeight - 40) + 20,
+      x: getInBoundValue(windowDimensions.width),
+      y: getInBoundValue(windowDimensions.height),
     });
+    
+  };
+
+  const getInBoundValue = (length) => {
+    const value = Math.random() * (length - 40) + 20;
+    console.log(`${value}`);
+    return value;
   };
 
   const despawnLyft = () => {
@@ -77,11 +86,14 @@ export const GameComponent = () => {
   }, [score]);
 
   return (
-    <div>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <ScoreHeader
         score={score}
+        options={{ backgroundColor: 0xeef1f5}}
       />
-      <Stage onClick={handleStageClick}>
+      <Stage 
+      
+      onClick={handleStageClick}>
         <Sprite
           image={lapinKulta}
           scale={0.04}
