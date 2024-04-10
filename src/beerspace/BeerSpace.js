@@ -3,6 +3,8 @@ import { Stage, Container, Text, Sprite } from '@pixi/react';
 import Freddy from './Freddy';
 import lapinKulta from '../assets/lapin-kulta.png';
 import lyftImage from '../assets/lyft-citrus.png';
+import stinsenImage from '../assets/stinsen.png';
+
 
 
 const ScoreHeader = ({ score }) => {
@@ -52,7 +54,7 @@ export const GameComponent = () => {
   const incrementLyft = () => {
     despawnLyft();
     setScore((prevScore) => prevScore + 10);
-  }; 
+  };
 
   const spawnLyft = () => {
     setLyft({
@@ -60,7 +62,7 @@ export const GameComponent = () => {
       x: getInBoundValue(windowDimensions.width),
       y: getInBoundValue(windowDimensions.height),
     });
-    
+
   };
 
   const getInBoundValue = (length) => {
@@ -77,6 +79,10 @@ export const GameComponent = () => {
     });
   };
 
+  function getScore() {
+    return score;
+  }
+
   useEffect(() => {
     if (score > 1) {
       if (lyft.isSpawned == -1 && Math.random() > 0.9) {
@@ -89,11 +95,15 @@ export const GameComponent = () => {
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <ScoreHeader
         score={score}
-        options={{ backgroundColor: 0xeef1f5}}
+        options={{ backgroundColor: 0xeef1f5 }}
       />
-      <Stage 
-      
-      onClick={handleStageClick}>
+      <Stage
+
+        onClick={handleStageClick}>
+        <Sprite
+          image={stinsenImage}
+          scale={0.55}
+        />
         <Sprite
           image={lapinKulta}
           scale={0.04}
@@ -114,6 +124,7 @@ export const GameComponent = () => {
           incrementBeer={incrementBeer}
           lyft={lyft}
           incremenLyft={incrementLyft}
+          getScore={getScore}
         />
       </Stage>
     </div>
