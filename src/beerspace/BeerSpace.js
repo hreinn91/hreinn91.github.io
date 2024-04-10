@@ -3,7 +3,7 @@ import { Stage, Container, Text, Sprite } from '@pixi/react';
 import Freddy from './Freddy';
 import lapinKulta from '../assets/lapin-kulta.png';
 import lyftImage from '../assets/lyft-citrus.png';
-import stinsenImage from '../assets/stinsen.png';
+import stinsenImage from '../assets/stinsen-1.png';
 
 
 
