@@ -102,7 +102,7 @@ export const GameComponent = () => {
         onClick={handleStageClick}>
         <Sprite
           image={stinsenImage}
-          scale={0.55}
+          scale={0.99}
         />
         <Sprite
           image={lapinKulta}
