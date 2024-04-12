@@ -1,8 +1,11 @@
 /* MAIN COMPONENT */
-
-
-
-
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents vertical scroll */
+    height: 100%; /* Ensures the body takes full viewport height */
+    width: 100%; /* Ensures the body takes full viewport width */
+}
 
 
 /* HEADER */

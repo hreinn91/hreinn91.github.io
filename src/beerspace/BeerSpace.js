@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Stage, Container, Text, Sprite } from '@pixi/react';
+import './style.css'
 import Freddy from './Freddy';
 import lapinKulta from '../assets/lapin-kulta.png';
 import lyftImage from '../assets/lyft-citrus.png';
