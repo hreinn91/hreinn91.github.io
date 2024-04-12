@@ -1,16 +1,18 @@
 .header-container {
+    background-color: #0B010B;
     display: flex;
     align-items: center;
     /* Vertically center the items in the container */
-    justify-content: space-between;
+    justify-content: start;
     /* Distribute space between and around content items */
-    padding: 10px;
+    padding: 2px;
     /* Optional: Adds some padding inside the container */
 }
 
 .score-text {
     font-size: 12px;
-    margin-left: 20px;
+    margin-right: 20px;
+    color: white;
     /* Optional: Adds some space between the health bar and the score text */
 }
 
@@ -26,8 +28,8 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     position: relative;
-    font-size: 10px;
-    color: white;
+    font-size: 11px;
+    color: gray;
 }
 
 .healthbartext {

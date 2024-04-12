@@ -9,11 +9,8 @@ const HealthBar = ({ maxHp = 100, hp = 100 } = {}) => {
                 <div class="bar" style={{ width: `${barWidth}%` }}></div>
                 <div class="hit" style={{ width: `${0}%` }}></div>
                 <div class="healthbartext">
-                    {hp} / {maxHp}
                 </div>
             </div>
-
-            <br />
         </div>
     );
 };
