@@ -59,7 +59,7 @@ export const GameComponent = () => {
   };
 
   const getInBoundValue = (length) => {
-    const value = Math.random() * (length - 40) + 20;
+    const value = Math.random() * (length - 50) + 25;
     return value;
   };
 

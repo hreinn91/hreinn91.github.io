@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sprite, useTick } from '@pixi/react';
-import freddyImage from '../assets/freddy-head.png';
+import freddyImageAlive from '../assets/freddy-head.png';
+import freddyImageDead from '../assets/sleepy-freddy.png';
 import fuckYouGuysImage from '../assets/fuck-you-guy.png';
 import donaldKukstrom from '../assets/donald-kukstrom.png';
 
@@ -17,12 +18,9 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
     const [speed, setSpeed] = useState(0.04);
     const [targetX, setTargetX] = useState(200);
     const [targetY, setTargetY] = useState(200);
-    const [isDead, setIsDead] = useState(false);
+    const [freddyImage, setFreddyImage] = useState(freddyImageAlive);
 
     const move = () => {
-        if (hp <= 0) {
-            return;
-        }
         const dx = x - targetX;
         const dy = y - targetY;
         const norm = Math.sqrt(dx * dx + dy * dy);
@@ -75,12 +73,23 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
 
     useTick(delta => {
         i += 0.05 * delta;
+        if (hp <= 0) {
+            setFreddyImage(freddyImageDead);
+            setScale(0.245);
+            return;
+        }
         move();
         checkScore();
     });
 
     return (
         <>
+            <FuckYouGuy
+                getFreddyPosition={getPosition}
+                getScore={getScore}
+                setDamage={setDamage}
+            />
+            <Kukstrom1 />
             <Sprite
                 image={freddyImage}
                 scale={[isFlipped * scale, scale]}
@@ -89,13 +98,6 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
                 y={y}
                 anchor={{ x: 0.5, y: 0.5 }}
             />
-            <FuckYouGuy
-                getFreddyPosition={getPosition}
-                setFreddyIsDead={setIsDead}
-                getScore={getScore}
-                setDamage={setDamage}
-            />
-            <Kukstrom1 />
         </>
     );
 }
