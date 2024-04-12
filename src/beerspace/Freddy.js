@@ -7,13 +7,14 @@ import donaldKukstrom from '../assets/donald-kukstrom.png';
 let i = 0;
 
 const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getScore, setDamage }) => {
-    const [scale, setScale] = useState(0.25);
+    const [scale, setScale] = useState(0.3);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
     const [x, setX] = useState(200);
     const [y, setY] = useState(200);
     const [vx, setVX] = useState(0);
     const [vy, setVY] = useState(0);
+    const [speed, setSpeed] = useState(0.04);
     const [targetX, setTargetX] = useState(200);
     const [targetY, setTargetY] = useState(200);
     const [isDead, setIsDead] = useState(false);
@@ -22,7 +23,10 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
         if (hp <= 0) {
             return;
         }
-        if (Math.abs(x - targetX) > 1 || Math.abs(y - targetY) > 1) {
+        const dx = x - targetX;
+        const dy = y - targetY;
+        const norm = Math.sqrt(dx * dx + dy * dy);
+        if (norm > 10) {
             setX(x + vx);
             setY(y + vy);
         }
@@ -38,7 +42,7 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
         setTargetY(clickEvent.y - clickEvent.rectTop);
         handleRotation(dx, dy, setAngle, setIsFlipped);
 
-        const speed = 0.02;
+        const speed = 0.03;
         setVX(speed * dx);
         setVY(speed * dy);
     };
