@@ -6,7 +6,7 @@ import donaldKukstrom from '../assets/donald-kukstrom.png';
 
 let i = 0;
 
-const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft, getScore }) => {
+const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getScore, setDamage }) => {
     const [scale, setScale] = useState(0.25);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
@@ -19,6 +19,9 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft, getScore 
     const [isDead, setIsDead] = useState(false);
 
     const move = () => {
+        if (hp <= 0) {
+            return;
+        }
         if (Math.abs(x - targetX) > 1 || Math.abs(y - targetY) > 1) {
             setX(x + vx);
             setY(y + vy);
@@ -41,11 +44,15 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft, getScore 
     };
 
     const checkScore = () => {
-        checkCollision(beer.x, beer.y, incrementBeer);
-        checkCollision(lyft.x, lyft.y, incremenLyft);
+        if (checkItemCollision(beer.x, beer.y, incrementBeer)) {
+            setDamage(-1);
+        };
+        if (checkItemCollision(lyft.x, lyft.y, incremenLyft)) {
+            setDamage(-50);
+        };
     };
 
-    const checkCollision = (targetX, targetY, trigger) => {
+    const checkItemCollision = (targetX, targetY, trigger) => {
         const dx = x - targetX;
         const dy = y - targetY;
         if (dx * dx + dy * dy < 490) {
@@ -82,6 +89,7 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft, getScore 
                 getFreddyPosition={getPosition}
                 setFreddyIsDead={setIsDead}
                 getScore={getScore}
+                setDamage={setDamage}
             />
             <Kukstrom1 />
         </>
@@ -90,7 +98,7 @@ const Freddy = ({ clickEvent, beer, incrementBeer, lyft, incremenLyft, getScore 
 
 
 
-const FuckYouGuy = ({ getFreddyPosition, setFreddyIsDead, getScore }) => {
+const FuckYouGuy = ({ getFreddyPosition, getScore, setDamage }) => {
     const [scale, setScale] = useState(0.17);
     const [isFlipped, setIsFlipped] = useState(1);
     const [angle, setAngle] = useState(0);
@@ -105,6 +113,9 @@ const FuckYouGuy = ({ getFreddyPosition, setFreddyIsDead, getScore }) => {
         const dy = getFreddyPosition().y - y;
         const norm = Math.sqrt(dx * dx + dy * dy);
 
+        if (norm < 30) {
+            setDamage(1);
+        }
         if (norm > 20) {
             setX(x + dx * speed / norm);
             setY(y + dy * speed / norm);
@@ -133,7 +144,7 @@ const FuckYouGuy = ({ getFreddyPosition, setFreddyIsDead, getScore }) => {
 
 const Kukstrom1 = ({ }) => {
 
-    const [scale, setScale] = useState(0.1);
+    const [scale, setScale] = useState(0.05);
     const [isFlipped, setIsFlipped] = useState(1);
     const [angle, setAngle] = useState(0);
     const [x, setX] = useState(Math.random() > 0.5 ? -50 : 600);

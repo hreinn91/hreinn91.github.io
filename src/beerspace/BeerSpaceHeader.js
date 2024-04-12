@@ -7,7 +7,6 @@ const HealthBar = ({ maxHp = 100, hp = 100 } = {}) => {
         <div>
             <div class="health-bar">
                 <div class="bar" style={{ width: `${barWidth}%` }}></div>
-                <div class="hit" style={{ width: `${0}%` }}></div>
                 <div class="healthbartext">
                 </div>
             </div>
@@ -17,14 +16,13 @@ const HealthBar = ({ maxHp = 100, hp = 100 } = {}) => {
 
 
 
-const BeerSpaceHeader = ({ score, setDamage }) => {
+const BeerSpaceHeader = ({ score, hp }) => {
     const maxHp = 100;
-    const [hp, setHp] = useState(maxHp);
 
     return (
         <div className="header-container">
-            <p className="score-text">The score: {score}</p>
-            <HealthBar maxHp={maxHp} hp={25} />
+            <p className="score-text">{score}</p>
+            <HealthBar maxHp={maxHp} hp={hp}/>
         </div>
     );
 };

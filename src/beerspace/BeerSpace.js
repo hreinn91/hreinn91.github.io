@@ -18,6 +18,7 @@ export const GameComponent = () => {
     rectTop: -1,
   });
   const [score, setScore] = useState(0);
+  const [hp, setHP] = useState(20);
   const [beer, setBeer] = useState({ x: 300, y: 300, width: 0, height: 0 });
   const [lyft, setLyft] = useState({ x: -100, y: -100, isSpawned: -1 });
 
@@ -59,7 +60,6 @@ export const GameComponent = () => {
 
   const getInBoundValue = (length) => {
     const value = Math.random() * (length - 40) + 20;
-    console.log(`${value}`);
     return value;
   };
 
@@ -75,6 +75,22 @@ export const GameComponent = () => {
     return score;
   }
 
+  const setDamage = (damage) => {
+    if(hp - damage < 0){
+      setHP(0);
+      return true;
+    }
+    if(hp - damage <= 100){
+      setHP(hp - damage);
+      return true;
+    }
+    if(hp - damage > 100){
+      setHP(100);
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     if (score > 1) {
       if (lyft.isSpawned === -1 && Math.random() > 0.9) {
@@ -87,6 +103,7 @@ export const GameComponent = () => {
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <BeerSpaceHeader
         score={score}
+        hp={hp}
       />
       <Stage
         onClick={handleStageClick}>
@@ -110,11 +127,13 @@ export const GameComponent = () => {
         />
         <Freddy
           clickEvent={clickEvent}
+          hp={hp}
           beer={beer}
           incrementBeer={incrementBeer}
           lyft={lyft}
           incremenLyft={incrementLyft}
           getScore={getScore}
+          setDamage={setDamage}
         />
       </Stage>
     </div>
