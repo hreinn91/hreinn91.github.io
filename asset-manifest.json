@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.05682c6c.css",
-    "main.js": "/static/js/main.152c726f.js",
+    "main.css": "/static/css/main.780ad745.css",
+    "main.js": "/static/js/main.c2e8a52c.js",
     "static/js/453.a925aff3.chunk.js": "/static/js/453.a925aff3.chunk.js",
     "static/media/stinsen-1.png": "/static/media/stinsen-1.8c6f868a5f79123e8426.png",
     "static/media/lapin-kulta.png": "/static/media/lapin-kulta.0073caab5a773e5d1408.png",
@@ -10,12 +10,12 @@
     "static/media/fuck-you-guy.png": "/static/media/fuck-you-guy.1ff6d85ab7088528d77f.png",
     "static/media/freddy-head.png": "/static/media/freddy-head.0f511f675df89c9e6d8b.png",
     "index.html": "/index.html",
-    "main.05682c6c.css.map": "/static/css/main.05682c6c.css.map",
-    "main.152c726f.js.map": "/static/js/main.152c726f.js.map",
+    "main.780ad745.css.map": "/static/css/main.780ad745.css.map",
+    "main.c2e8a52c.js.map": "/static/js/main.c2e8a52c.js.map",
     "453.a925aff3.chunk.js.map": "/static/js/453.a925aff3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.05682c6c.css",
-    "static/js/main.152c726f.js"
+    "static/css/main.780ad745.css",
+    "static/js/main.c2e8a52c.js"
   ]
 }
