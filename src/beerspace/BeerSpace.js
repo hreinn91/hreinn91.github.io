@@ -4,15 +4,7 @@ import Freddy from './Freddy';
 import lapinKulta from '../assets/lapin-kulta.png';
 import lyftImage from '../assets/lyft-citrus.png';
 import stinsenImage from '../assets/stinsen-1.png';
-
-
-
-const ScoreHeader = ({ score }) => {
-
-  return (<p>The score: {score} </p>
-  );
-};
-
+import BeerSpaceHeader from './BeerSpaceHeader';
 
 export const GameComponent = () => {
   const [windowDimensions, setWindowDimensions] = useState({
@@ -85,7 +77,7 @@ export const GameComponent = () => {
 
   useEffect(() => {
     if (score > 1) {
-      if (lyft.isSpawned == -1 && Math.random() > 0.9) {
+      if (lyft.isSpawned === -1 && Math.random() > 0.9) {
         spawnLyft();
       }
     }
@@ -93,12 +85,10 @@ export const GameComponent = () => {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <ScoreHeader
+      <BeerSpaceHeader
         score={score}
-        options={{ backgroundColor: 0xeef1f5 }}
       />
       <Stage
-
         onClick={handleStageClick}>
         <Sprite
           image={stinsenImage}
