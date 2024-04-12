@@ -106,10 +106,8 @@ const FuckYouGuy = ({ getFreddyPosition, getScore, setDamage }) => {
     const [scale, setScale] = useState(0.17);
     const [isFlipped, setIsFlipped] = useState(1);
     const [angle, setAngle] = useState(0);
-    const [x, setX] = useState(100);
-    const [y, setY] = useState(100);
-    // const [x, setX] = useState(Math.random() > 0.5 ? -50 : 600);
-    // const [y, setY] = useState(Math.random() > 0.5 ? -50 : 700);
+    const [x, setX] = useState(Math.random() > 0.5 ? -50 : 600);
+    const [y, setY] = useState(Math.random() > 0.5 ? -50 : 700);
 
     const move = () => {
         const speed = 0.028 + 0.005 * getScore();
