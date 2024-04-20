@@ -4,6 +4,7 @@ import freddyImageAlive from '../assets/freddy-head.png';
 import freddyImageDead from '../assets/sleepy-freddy.png';
 import fuckYouGuysImage from '../assets/fuck-you-guy.png';
 import donaldKukstrom from '../assets/donald-kukstrom.png';
+import ohhManImage from '../assets/ooh-man.png';
 
 let i = 0;
 
@@ -89,6 +90,7 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
                 getScore={getScore}
                 setDamage={setDamage}
             />
+            <OhhMan />
             <Kukstrom1 />
             <Sprite
                 image={freddyImage}
@@ -128,7 +130,6 @@ const FuckYouGuy = ({ getFreddyPosition, getScore, setDamage }) => {
     };
 
     useTick(delta => {
-        i += 0.05 * delta;
         if (getScore() > 0) {
             move();
         }
@@ -176,6 +177,38 @@ const handleRotation = (dx, dy, setAngle, setIsFlipped) => {
     }
     setAngle(newAngle);
     setIsFlipped(isFlipped);
+};
+
+const OhhMan = ({ getFreddyPosition, setDamage }) => {
+    const [scale, setScale] = useState(0.04);
+    const [isFlipped, setIsFlipped] = useState(-1);
+    const [vx, setVX] = useSet(1);
+    const [x, setX] = useState(-100);
+    const [y, setY] = useState(100);
+    const [isRunning, setIsRunning] = useState(false);
+
+    const move = () => {
+        setX(x + vx);
+    };
+    
+    useTick(delta => {
+        if (hp <= 0) {
+            return;
+        }
+    
+        move();
+    });
+
+    return (
+        <Sprite
+            image={ohhManImage}
+            scale={[-1 * isFlipped * scale, scale]}
+            angle={0}
+            x={x}
+            y={y}
+            anchor={0.5}
+        />
+    );
 };
 
 export default Freddy;
