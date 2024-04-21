@@ -90,7 +90,9 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
                 getScore={getScore}
                 setDamage={setDamage}
             />
-            <OhhMan />
+            <OhhMan
+                getFreddyPosition={getPosition}
+                setDamage={setDamage} />
             <Kukstrom1 />
             <Sprite
                 image={freddyImage}
@@ -159,12 +161,74 @@ const Kukstrom1 = ({ }) => {
         <Sprite
             image={donaldKukstrom}
             scale={[-1 * isFlipped * scale, scale]}
-            angle={angle}
             x={x}
+            angle={angle}
             y={y}
             anchor={0.5}
         />
     )
+};
+
+const OhhMan = ({ getFreddyPosition, setDamage }) => {
+    const [scale, setScale] = useState(0.04);
+    const[speed, setSpeed] = useState(1.5);
+    const [isFlipped, setIsFlipped] = useState(-1);
+    const [vx, setVX] = useState(1.5);
+    const [x, setX] = useState(-100);
+    const [y, setY] = useState(randomSpan(50, 550));
+
+    const move = () => {
+        setX(x + vx);
+        const dx = getFreddyPosition().x - x;
+        const dy = getFreddyPosition().y - y;
+        const norm = Math.sqrt(dx * dx + dy * dy);
+        if (norm < 30) {
+            setDamage(2);
+        }
+        turn(dx, dy);
+    };
+
+    function turn(dx, dy) {
+        let newAngle = Math.atan2(dy, dx);
+        let isFlipped = -1;
+        if (newAngle < -0.5 * Math.PI || newAngle > 0.5 * Math.PI) {
+            isFlipped = 1;
+        }
+        setIsFlipped(isFlipped);
+    }
+
+    function respawn() {
+        // Spawn leftside
+        setY(randomSpan(50, 550));
+        if (Math.random() > 0.5) {
+            setVX(speed);
+            setX(-100);
+        } else {
+            setVX(speed * -1);
+            setX(900);
+        }
+    };
+
+    useTick(delta => {
+        if (x > -200 && x < 1000) {
+            move();
+        } else {
+            if (Math.random() > 0.1) {
+                respawn();
+            }
+        }
+    });
+
+    return (
+        <Sprite
+            image={ohhManImage}
+            scale={[-1 * isFlipped * scale, scale]}
+            angle={0}
+            x={x}
+            y={y}
+            anchor={0.5}
+        />
+    );
 };
 
 const handleRotation = (dx, dy, setAngle, setIsFlipped) => {
@@ -179,36 +243,6 @@ const handleRotation = (dx, dy, setAngle, setIsFlipped) => {
     setIsFlipped(isFlipped);
 };
 
-const OhhMan = ({ getFreddyPosition, setDamage }) => {
-    const [scale, setScale] = useState(0.04);
-    const [isFlipped, setIsFlipped] = useState(-1);
-    const [vx, setVX] = useSet(1);
-    const [x, setX] = useState(-100);
-    const [y, setY] = useState(100);
-    const [isRunning, setIsRunning] = useState(false);
-
-    const move = () => {
-        setX(x + vx);
-    };
-    
-    useTick(delta => {
-        if (hp <= 0) {
-            return;
-        }
-    
-        move();
-    });
-
-    return (
-        <Sprite
-            image={ohhManImage}
-            scale={[-1 * isFlipped * scale, scale]}
-            angle={0}
-            x={x}
-            y={y}
-            anchor={0.5}
-        />
-    );
-};
+const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };
 
 export default Freddy;
