@@ -12,6 +12,7 @@ export const GameComponent = () => {
     width: 400,
     height: 600
   });
+  const [backgroundImage, setBackgroundImage] = useState(stinsenImage);
   const [clickEvent, setClickEvent] = useState({
     x: -1,
     y: -1,
@@ -50,6 +51,10 @@ export const GameComponent = () => {
     setScore((prevScore) => prevScore + 10);
   };
 
+  const addScore = (s) => {
+    setScore(score + s);
+  }
+
   const spawnLyft = () => {
     setLyft({
       isSpawned: 1,
@@ -77,15 +82,15 @@ export const GameComponent = () => {
   }
 
   const setDamage = (damage) => {
-    if(hp - damage < 0){
+    if (hp - damage < 0) {
       setHP(0);
       return true;
     }
-    if(hp - damage <= 100){
+    if (hp - damage <= 100) {
       setHP(hp - damage);
       return true;
     }
-    if(hp - damage > 100){
+    if (hp - damage > 100) {
       setHP(100);
       return true;
     }
@@ -109,7 +114,7 @@ export const GameComponent = () => {
       <Stage
         onClick={handleStageClick}>
         <Sprite
-          image={stinsenImage}
+          image={backgroundImage}
           scale={0.99}
         />
         <Sprite
@@ -128,8 +133,10 @@ export const GameComponent = () => {
         />
         <Freddy
           clickEvent={clickEvent}
+          setBackground={setBackgroundImage}
           hp={hp}
           beer={beer}
+          addScore={addScore}
           incrementBeer={incrementBeer}
           lyft={lyft}
           incremenLyft={incrementLyft}

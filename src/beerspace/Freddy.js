@@ -5,10 +5,13 @@ import freddyImageDead from '../assets/sleepy-freddy.png';
 import fuckYouGuysImage from '../assets/fuck-you-guy.png';
 import donaldKukstrom from '../assets/donald-kukstrom.png';
 import ohhManImage from '../assets/ooh-man.png';
+import BagImage from '../assets/coke.png';
+import CrazyHeadImage from '../assets/bosshead.png';
+import DonkenImage from '../assets/donken.jpg';
 
 let i = 0;
 
-const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getScore, setDamage }) => {
+const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addScore, getScore, setDamage, setBackground }) => {
     const [scale, setScale] = useState(0.3);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
@@ -16,7 +19,7 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
     const [y, setY] = useState(200);
     const [vx, setVX] = useState(0);
     const [vy, setVY] = useState(0);
-    const [speed, setSpeed] = useState(0.04);
+    const [speed, setSpeed] = useState(0.03);
     const [targetX, setTargetX] = useState(200);
     const [targetY, setTargetY] = useState(200);
     const [freddyImage, setFreddyImage] = useState(freddyImageAlive);
@@ -40,8 +43,6 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
         setTargetX(clickEvent.x - clickEvent.rectLeft);
         setTargetY(clickEvent.y - clickEvent.rectTop);
         handleRotation(dx, dy, setAngle, setIsFlipped);
-
-        const speed = 0.03;
         setVX(speed * dx);
         setVY(speed * dy);
     };
@@ -66,6 +67,13 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
     };
 
     const getPosition = () => ({ x: x, y: y });
+
+    const setCrazy = () => {
+        setFreddyImage(CrazyHeadImage);
+        setSpeed(0.04);
+        setDamage(-200);
+        //setBackground(DonkenImage);
+    };
 
     useEffect(() => {
         handleMouseClick(clickEvent);
@@ -94,6 +102,10 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
                 getFreddyPosition={getPosition}
                 setDamage={setDamage} />
             <Kukstrom1 />
+            <Bag
+                getFreddyPosition={getPosition}
+                setCrazy={setCrazy}
+            />
             <Sprite
                 image={freddyImage}
                 scale={[isFlipped * scale, scale]}
@@ -105,6 +117,32 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, getSc
         </>
     );
 }
+
+const Bag = ({ getFreddyPosition, setCrazy }) => {
+    const [scale, setScale] = useState(0.07);
+    const [x, setX] = useState(400);
+    const [y, setY] = useState(200);
+
+    useTick(delta => {
+
+        const dx = getFreddyPosition().x - x;
+        const dy = getFreddyPosition().y - y;
+        const norm = Math.sqrt(dx * dx + dy * dy);
+        if(norm < 30){
+            setCrazy();
+        }
+
+    });
+
+    return (<Sprite
+        image={BagImage}
+        scale={scale}
+        rotation={20}
+        x={x}
+        y={y}
+        anchor={0.5}
+    />);
+};
 
 
 
@@ -162,8 +200,8 @@ const Kukstrom1 = ({ }) => {
             image={donaldKukstrom}
             scale={[-1 * isFlipped * scale, scale]}
             x={x}
-            angle={angle}
             y={y}
+            angle={angle}
             anchor={0.5}
         />
     )
@@ -171,7 +209,7 @@ const Kukstrom1 = ({ }) => {
 
 const OhhMan = ({ getFreddyPosition, setDamage }) => {
     const [scale, setScale] = useState(0.04);
-    const[speed, setSpeed] = useState(1.5);
+    const [speed, setSpeed] = useState(1.5);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [vx, setVX] = useState(1.5);
     const [x, setX] = useState(-100);
