@@ -1,23 +1,26 @@
 {
   "files": {
     "main.css": "/static/css/main.27581e85.css",
-    "main.js": "/static/js/main.a1123443.js",
+    "main.js": "/static/js/main.3f7a49b0.js",
     "static/js/453.a925aff3.chunk.js": "/static/js/453.a925aff3.chunk.js",
     "static/media/stinsen-1.png": "/static/media/stinsen-1.8c6f868a5f79123e8426.png",
     "static/media/lapin-kulta.png": "/static/media/lapin-kulta.0073caab5a773e5d1408.png",
     "static/media/donald-kukstrom.png": "/static/media/donald-kukstrom.fa5866486ebf11f02c13.png",
     "static/media/ooh-man.png": "/static/media/ooh-man.ae848ae56982df0be7f5.png",
+    "static/media/coke.png": "/static/media/coke.67f72ec591b5ff75fc97.png",
     "static/media/lyft-citrus.png": "/static/media/lyft-citrus.f66943920fac9e9f5a76.png",
+    "static/media/donken.jpg": "/static/media/donken.785f766bcb9a4d75ded4.jpg",
     "static/media/fuck-you-guy.png": "/static/media/fuck-you-guy.1ff6d85ab7088528d77f.png",
     "static/media/freddy-head.png": "/static/media/freddy-head.0f511f675df89c9e6d8b.png",
     "static/media/sleepy-freddy.png": "/static/media/sleepy-freddy.5d8012e32a84b97ba1c6.png",
+    "static/media/bosshead.png": "/static/media/bosshead.43728ef66686f87d291f.png",
     "index.html": "/index.html",
     "main.27581e85.css.map": "/static/css/main.27581e85.css.map",
-    "main.a1123443.js.map": "/static/js/main.a1123443.js.map",
+    "main.3f7a49b0.js.map": "/static/js/main.3f7a49b0.js.map",
     "453.a925aff3.chunk.js.map": "/static/js/453.a925aff3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.27581e85.css",
-    "static/js/main.a1123443.js"
+    "static/js/main.3f7a49b0.js"
   ]
 }
