@@ -73,6 +73,7 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
         setFreddyImage(CrazyHeadImage);
         setSpeed(0.04);
         setDamage(-200);
+        addScore(30);
     };
 
     useEffect(() => {
@@ -89,10 +90,18 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
         }
         move();
         checkScore();
+        if (Math.floor(i) % 50 == 0) {
+            setFreddyImage(freddyImageAlive);
+        }
     });
 
     return (
         <>
+            <TobbeDahmer
+                getFreddyPosition={getPosition}
+                setDamage={setDamage}
+                getScore={getScore}
+            />
             <TobbeBloom />
             <FuckYouGuy
                 getFreddyPosition={getPosition}
@@ -100,11 +109,6 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
                 setDamage={setDamage}
             />
             <OhhMan
-                getFreddyPosition={getPosition}
-                setDamage={setDamage}
-                getScore={getScore}
-            />
-            <TobbeDahmer
                 getFreddyPosition={getPosition}
                 setDamage={setDamage}
                 getScore={getScore}
@@ -153,8 +157,8 @@ const TobbeDahmer = ({ getFreddyPosition, setDamage, getScore, isCrazy }) => {
 
     const move = (dx, dy, norm) => {
         var speed = 0.02;
-        if(norm < 140){
-            speed = 0.35;
+        if (norm < 150) {
+            speed = 0.5;
         }
         if (norm > 20) {
             setX(x + dx * speed / norm);
@@ -164,7 +168,7 @@ const TobbeDahmer = ({ getFreddyPosition, setDamage, getScore, isCrazy }) => {
     };
 
     useTick(delta => {
-        if (getScore() > 50) {
+        if (getScore() > 40) {
             const dx = getFreddyPosition().x - x;
             const dy = getFreddyPosition().y - y;
             const norm = Math.sqrt(dx * dx + dy * dy);
@@ -198,16 +202,30 @@ const Bag = ({ getScore, getFreddyPosition, setCrazy }) => {
     const [x, setX] = useState(-200);
     const [y, setY] = useState(-200);
 
-    useTick(delta => {
-        if (getScore() > 60 && Math.random() > 80) {
+    function spawnBag() {
+        if (x === -200) {
+            setX(randomSpan(20, 360));
+            setY(randomSpan(50, 550));
         }
+    }
+
+    function handleCollision() {
         const dx = getFreddyPosition().x - x;
         const dy = getFreddyPosition().y - y;
         const norm = Math.sqrt(dx * dx + dy * dy);
         if (norm < 30) {
+            console.log(`check`);
+            setX(-200);
+            setY(-200);
             setCrazy();
         }
+    }
 
+    useTick(delta => {
+        if (getScore() > 50 && Math.floor(i) % 40 == 0) {
+            spawnBag();
+        }
+        handleCollision();
     });
 
     return (<Sprite
@@ -226,8 +244,8 @@ const FuckYouGuy = ({ getFreddyPosition, getScore, setDamage }) => {
     const [scale, setScale] = useState(0.17);
     const [isFlipped, setIsFlipped] = useState(1);
     const [angle, setAngle] = useState(0);
-    const [x, setX] = useState(Math.random() > 0.5 ? -50 : 600);
-    const [y, setY] = useState(Math.random() > 0.5 ? -50 : 700);
+    const [x, setX] = useState(Math.random() > 0.5 ? -20 : 600);
+    const [y, setY] = useState(Math.random() > 0.5 ? -20 : 600);
 
     const move = () => {
         const speed = 0.028 + 0.005 * getScore();
@@ -235,6 +253,9 @@ const FuckYouGuy = ({ getFreddyPosition, getScore, setDamage }) => {
         const dy = getFreddyPosition().y - y;
         const norm = Math.sqrt(dx * dx + dy * dy);
 
+        if (norm < 40) {
+            setDamage(0.3);
+        }
         if (norm < 30) {
             setDamage(1);
         }

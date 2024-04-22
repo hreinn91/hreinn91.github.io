@@ -61,7 +61,6 @@ export const GameComponent = () => {
       x: getInBoundValue(windowDimensions.width),
       y: getInBoundValue(windowDimensions.height),
     });
-
   };
 
   const getInBoundValue = (length) => {
@@ -99,7 +98,7 @@ export const GameComponent = () => {
 
   useEffect(() => {
     if (score > 1) {
-      if (lyft.isSpawned === -1 && Math.random() > 0.9) {
+      if (lyft.isSpawned === -1 && Math.random() > 0.8) {
         spawnLyft();
       }
     }
@@ -117,6 +116,18 @@ export const GameComponent = () => {
           image={backgroundImage}
           scale={0.99}
         />
+        <Freddy
+          clickEvent={clickEvent}
+          setBackground={setBackgroundImage}
+          hp={hp}
+          beer={beer}
+          addScore={addScore}
+          incrementBeer={incrementBeer}
+          lyft={lyft}
+          incremenLyft={incrementLyft}
+          getScore={getScore}
+          setDamage={setDamage}
+        />
         <Sprite
           image={lapinKulta}
           scale={0.04}
@@ -130,18 +141,6 @@ export const GameComponent = () => {
           y={lyft.y}
           scale={0.06}
           anchor={0.5}
-        />
-        <Freddy
-          clickEvent={clickEvent}
-          setBackground={setBackgroundImage}
-          hp={hp}
-          beer={beer}
-          addScore={addScore}
-          incrementBeer={incrementBeer}
-          lyft={lyft}
-          incremenLyft={incrementLyft}
-          getScore={getScore}
-          setDamage={setDamage}
         />
       </Stage>
     </div>
