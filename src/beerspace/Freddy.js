@@ -7,7 +7,8 @@ import donaldKukstrom from '../assets/donald-kukstrom.png';
 import ohhManImage from '../assets/ooh-man.png';
 import BagImage from '../assets/coke.png';
 import CrazyHeadImage from '../assets/bosshead.png';
-import DonkenImage from '../assets/donken.jpg';
+import TobeBloomImage from '../assets/tobbe-bloom.png';
+import TobeDahmerImage from '../assets/tobbe-dahlmer.png';
 
 let i = 0;
 
@@ -72,7 +73,6 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
         setFreddyImage(CrazyHeadImage);
         setSpeed(0.04);
         setDamage(-200);
-        //setBackground(DonkenImage);
     };
 
     useEffect(() => {
@@ -93,6 +93,7 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
 
     return (
         <>
+            <TobbeBloom />
             <FuckYouGuy
                 getFreddyPosition={getPosition}
                 getScore={getScore}
@@ -100,10 +101,18 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
             />
             <OhhMan
                 getFreddyPosition={getPosition}
-                setDamage={setDamage} />
+                setDamage={setDamage}
+                getScore={getScore}
+            />
+            <TobbeDahmer
+                getFreddyPosition={getPosition}
+                setDamage={setDamage}
+                getScore={getScore}
+            />
             <Kukstrom1 />
             <Bag
                 getFreddyPosition={getPosition}
+                getScore={getScore}
                 setCrazy={setCrazy}
             />
             <Sprite
@@ -118,17 +127,84 @@ const Freddy = ({ clickEvent, hp, beer, incrementBeer, lyft, incremenLyft, addSc
     );
 }
 
-const Bag = ({ getFreddyPosition, setCrazy }) => {
-    const [scale, setScale] = useState(0.07);
-    const [x, setX] = useState(400);
-    const [y, setY] = useState(200);
+const TobbeBloom = ({ }) => {
+    const [scale, setScale] = useState(0.12);
+    const [isFlipped, setIsFlipped] = useState(-1);
+    const [x, setX] = useState(80);
+    const [y, setY] = useState(600);
+
+    return (
+        <Sprite
+            image={TobeBloomImage}
+            scale={[-1 * isFlipped * scale, scale]}
+            angle={0}
+            x={x}
+            y={y}
+            anchor={0.5}
+        />
+    );
+};
+
+const TobbeDahmer = ({ getFreddyPosition, setDamage, getScore, isCrazy }) => {
+    const [scale, setScale] = useState(0.2);
+    const [isFlipped, setIsFlipped] = useState(-1);
+    const [x, setX] = useState(-84);
+    const [y, setY] = useState(350);
+
+    const move = (dx, dy, norm) => {
+        var speed = 0.02;
+        if(norm < 140){
+            speed = 0.35;
+        }
+        if (norm > 20) {
+            setX(x + dx * speed / norm);
+            setY(y + dy * speed / norm);
+        }
+        turn(-1 * dx, dy, setIsFlipped)
+    };
 
     useTick(delta => {
+        if (getScore() > 50) {
+            const dx = getFreddyPosition().x - x;
+            const dy = getFreddyPosition().y - y;
+            const norm = Math.sqrt(dx * dx + dy * dy);
+            move(dx, dy, norm);
+            if (norm < 110) {
+                setDamage(0.05);
+            }
+            if (norm < 80) {
+                setDamage(0.1);
+            }
+            if (norm < 40) {
+                setDamage(5);
+            }
+        }
+    });
 
+    return (
+        <Sprite
+            image={TobeDahmerImage}
+            scale={[-1 * isFlipped * scale, scale]}
+            angle={0}
+            x={x}
+            y={y}
+            anchor={0.5}
+        />
+    );
+};
+
+const Bag = ({ getScore, getFreddyPosition, setCrazy }) => {
+    const [scale, setScale] = useState(0.07);
+    const [x, setX] = useState(-200);
+    const [y, setY] = useState(-200);
+
+    useTick(delta => {
+        if (getScore() > 60 && Math.random() > 80) {
+        }
         const dx = getFreddyPosition().x - x;
         const dy = getFreddyPosition().y - y;
         const norm = Math.sqrt(dx * dx + dy * dy);
-        if(norm < 30){
+        if (norm < 30) {
             setCrazy();
         }
 
@@ -207,48 +283,37 @@ const Kukstrom1 = ({ }) => {
     )
 };
 
-const OhhMan = ({ getFreddyPosition, setDamage }) => {
+const OhhMan = ({ getFreddyPosition, setDamage, getScore }) => {
     const [scale, setScale] = useState(0.04);
-    const [speed, setSpeed] = useState(1.5);
+    const [speed, setSpeed] = useState(0.2);
     const [isFlipped, setIsFlipped] = useState(-1);
-    const [vx, setVX] = useState(1.5);
-    const [x, setX] = useState(-100);
-    const [y, setY] = useState(randomSpan(50, 550));
+    const [x, setX] = useState(-200);
+    const [y, setY] = useState(randomSpan(20, 600));
 
     const move = () => {
-        setX(x + vx);
+        setX(x + speed);
         const dx = getFreddyPosition().x - x;
         const dy = getFreddyPosition().y - y;
         const norm = Math.sqrt(dx * dx + dy * dy);
         if (norm < 30) {
-            setDamage(2);
+            setDamage(2 + 0.1 * getScore());
         }
-        turn(dx, dy);
+        turn(dx, dy, setIsFlipped);
     };
 
-    function turn(dx, dy) {
-        let newAngle = Math.atan2(dy, dx);
-        let isFlipped = -1;
-        if (newAngle < -0.5 * Math.PI || newAngle > 0.5 * Math.PI) {
-            isFlipped = 1;
-        }
-        setIsFlipped(isFlipped);
-    }
-
     function respawn() {
-        // Spawn leftside
         setY(randomSpan(50, 550));
         if (Math.random() > 0.5) {
-            setVX(speed);
-            setX(-100);
+            setSpeed(speed + 0.01 * getScore());
+            setX(-300);
         } else {
-            setVX(speed * -1);
-            setX(900);
+            setSpeed((speed + 0.01 * getScore()) * -1);
+            setX(1000);
         }
     };
 
     useTick(delta => {
-        if (x > -200 && x < 1000) {
+        if (x > -400 && x < 1200) {
             move();
         } else {
             if (Math.random() > 0.1) {
@@ -280,6 +345,15 @@ const handleRotation = (dx, dy, setAngle, setIsFlipped) => {
     setAngle(newAngle);
     setIsFlipped(isFlipped);
 };
+
+function turn(dx, dy, setIsFlipped) {
+    let newAngle = Math.atan2(dy, dx);
+    let isFlipped = -1;
+    if (newAngle < -0.5 * Math.PI || newAngle > 0.5 * Math.PI) {
+        isFlipped = 1;
+    }
+    setIsFlipped(isFlipped);
+}
 
 const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };
 
