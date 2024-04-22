@@ -18,6 +18,10 @@ const router = createHashRouter([
     ]
   },
   {
+    path: "/rultenpastinsen",
+    element: <BeerSpace />
+  },
+  {
     path: "/beerspace",
     element: <BeerSpace />
   },
