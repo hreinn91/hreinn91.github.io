@@ -1,0 +1,25 @@
+/* MAIN COMPONENT */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents vertical scroll */
+    height: 100%; /* Ensures the body takes full viewport height */
+    width: 100%; /* Ensures the body takes full viewport width */
+}
+
+
+/* HEADER */
+
+.header-container {
+    background-color: darkgray;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    /* Vertically center the items in the container */
+    justify-content: start;
+    /* Distribute space between and around content items */
+    padding: 2px;
+    /* Optional: Adds some padding inside the container */
+    font-weight: bold;
+    
+}
