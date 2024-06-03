@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Sprite, useTick } from '@pixi/react';
-import freddyImage from '../assets/freddy-head.png';
+import freddyImage from '../assets/bosshead.png';
 import tobbeImage from '../assets/jimmy-tobbesson-head.png';
 
-export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame }) => {
+export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame, isFlipped }) => {
     const [angle, setAngle] = useState(0);
 
     useTick(delta => {
@@ -11,7 +11,6 @@ export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame }) =>
     });
 
     const handleOnClick = () => {
-        console.log(`I was clicked!!`);
         handleStartGame(headImage, scale);
     };
 
@@ -22,7 +21,7 @@ export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame }) =>
                 eventMode={'static'}
                 onclick={handleOnClick}
                 image={headImage}
-                scale={scale}
+                scale={[isFlipped * scale, scale]}
                 rotation={angle}
                 x={xPos}
                 y={yPos}
@@ -39,14 +38,16 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 headImage={freddyImage}
                 xPos={100}
                 yPos={100}
-                scale={[-0.5, 0.5]}
+                scale={0.7}
+                isFlipped={1}
                 handleStartGame={handleStartGame}
             />
             <SelectHead
                 headImage={tobbeImage}
                 xPos={200}
-                yPos={100}
-                scale={[0.2, 0.2]}
+                yPos={200}
+                scale={0.3}
+                isFlipped={-1}
                 handleStartGame={handleStartGame}
             />
         </>

@@ -23,3 +23,19 @@ html, body {
     font-weight: bold;
     
 }
+
+
+.header-container-button {
+    background-color: darkgray;
+    font-weight: bold;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    /* Vertically center the items in the container */
+    justify-content: start;
+    /* Distribute space between and around content items */
+    padding: 2px;
+    /* Optional: Adds some padding inside the container */
+    font-weight: bold;
+    
+}
