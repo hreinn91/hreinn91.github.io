@@ -38,7 +38,7 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 headImage={freddyImage}
                 xPos={100}
                 yPos={100}
-                scale={0.7}
+                scale={0.5}
                 isFlipped={1}
                 handleStartGame={handleStartGame}
             />
@@ -46,7 +46,7 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 headImage={tobbeImage}
                 xPos={200}
                 yPos={200}
-                scale={0.3}
+                scale={0.2}
                 isFlipped={-1}
                 handleStartGame={handleStartGame}
             />

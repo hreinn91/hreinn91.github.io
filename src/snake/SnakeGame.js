@@ -78,13 +78,14 @@ export const SnakeGame = ({
         setHeadQueue(prevQueue => {
             const newQueue = [...prevQueue];
             const newPosition = [headQueue[0][0] + direction[0], headQueue[0][1] + direction[1]];
+            const lastPosition = newQueue[newQueue.length - 1];
             for (let i = newQueue.length - 1; i > 0; i--) {
                 newQueue[i] = getNextPos(newQueue[i], newQueue[i - 1]);
                 // newQueue[i] = getNextPosition(newQueue[i], newQueue[i - 1]);
             }
             newQueue[0] = newPosition;
             if (isAppleOverlap(newPosition)) {
-                addNewHead(newQueue);
+                addNewHead(newQueue, lastPosition);
             }
             return newQueue;
         });
@@ -100,12 +101,14 @@ export const SnakeGame = ({
         return false;
     }
 
-    const addNewHead = (newQueue) => {
+    const addNewHead = (newQueue, lastPosition) => {
         console.log(`EAT EAT EAT APPLE`);
         if (newQueue.length == 1) {
             let headPos = newQueue[0];
             let newHeadPosition = sub(headPos, direction);
             newQueue.push(newHeadPosition);
+        } else {
+            newQueue.push(lastPosition);
         }
         updateApplePosition();
     }
@@ -118,12 +121,11 @@ export const SnakeGame = ({
     };
 
     const getNextPos = (pos0, pos1) => {
+        const dist = 20;
         let x0 = pos0[0];
         let y0 = pos0[1];
         let x1 = pos1[0];
         let y1 = pos1[1];
-
-        const dist = 20;
         if (x0 == x1) {
             if (y1 > y0) {
                 return [x1, y1 - dist];
@@ -131,26 +133,21 @@ export const SnakeGame = ({
                 return [x1, y1 + dist];
             }
         }
-        
-        if(y0 == y1)
-        
-        
-        else {
+        if(y0 == y1) {
             if (x1 > x0) {
                 return [x1 - dist, y1];
             } else {
                 return [x1 + dist, y1];
             }
         }
-    };
-
-    const getNextPosition = (pos_0, pos_1) => {
-        let d_pos = [pos_1[0] - pos_0[0], pos_1[1] - pos_0[1]];
-        let d_pos_norm = Math.sqrt(d_pos[0] * d_pos[0] + d_pos[1] * d_pos[1]);
-        return [(speed / d_pos_norm) * d_pos[0] + pos_0[0], (speed / d_pos_norm) * d_pos[1] + pos_0[1]];
+        return pos1;
     };
 
     useTick(delta => {
+        index = index + 1;
+        if(index % 10 != 0){
+            return;
+        }
         index = index + 1;
         if (isReset) {
             setHeadQueue(initialState);
@@ -163,7 +160,7 @@ export const SnakeGame = ({
         <>
             <Sprite
                 image={BagImage}
-                scale={[0.06, 0.06]}
+                scale={[0.04, 0.04]}
                 rotation={0}
                 x={applePosition[0]}
                 y={applePosition[1]}

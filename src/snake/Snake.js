@@ -1,26 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
-import { Stage, Sprite, Container, Text } from '@pixi/react';
-import freddyImage from '../assets/bosshead.png';
-import './style.css'
+import { useState, useEffect } from 'react';
+import { Stage } from '@pixi/react';
+import './style.css';
 import '@pixi/events'; // Needed for Sprite interaction
 import { SnakeSelect } from './SnakeSelect';
 import { SnakeGame } from './SnakeGame';
 
-
-export const Sanke = () => {
+export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
     const [isReset, setIsReset] = useState(false);
-    const [headerText, setHeaderText] = useState("Choose your Douchebag");
-    const [scale, setScale] = useState(0)
-    const [headImage, setHeadImage] = useState(freddyImage);
-    const [dimensions, setDimensions] =
-        useState({ width: window.innerWidth, height: window.innerHeight });
+    const [headerText, setHeaderText] = useState("Choose your character");
+    const [scale, setScale] = useState(1);
+    const [headImage, setHeadImage] = useState(null);
+    const [dimensions, setDimensions] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
 
-
-    const handleStartGame = (image, scale) => {
-        setIsSelectMode(false);
+    const handleStartGame = (image, selectedScale) => {
         setHeadImage(image);
-        setScale(scale)
+        setScale(selectedScale);
+        setIsSelectMode(false);
+        setHeaderText("Your Game is Running");
     };
 
     const handleButtonClick = () => {
@@ -37,34 +37,39 @@ export const Sanke = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (isReset) {
+            setIsReset(false);
+            setIsSelectMode(true);
+            setHeaderText("Choose your character");
+        }
+    }, [isReset]);
+
     return (
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: 'black' }}>
             <div className='header-container'>
                 {headerText}
             </div>
             <div className='header-container'>
-                <button
-                    
-                    onClick={handleButtonClick}>
-                        Reset
-                    </button>
+                <button onClick={handleButtonClick}>
+                    Reset
+                </button>
             </div>
-            <Stage
-                width={dimensions.width}
-                height={dimensions.height}
-                options={{ backgroundColor: 0x1d2330 }}
-            >
-                {isSelectMode ? <SnakeSelect handleStartGame={handleStartGame} /> :
+            <Stage width={dimensions.width} height={dimensions.height} options={{ backgroundColor: 0x1d2330 }}>
+                {isSelectMode ? (
+                    <SnakeSelect handleStartGame={handleStartGame} />
+                ) : (
                     <SnakeGame
                         headImage={headImage}
                         scale={scale}
-                        speed={0.6}
+                        speed={6}
                         isReset={isReset}
-                        setIsReset={setIsReset} />}
+                        setIsReset={setIsReset}
+                    />
+                )}
             </Stage>
         </div>
     );
-}
+};
 
-
-export default Sanke;
+export default Snake;
