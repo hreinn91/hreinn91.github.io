@@ -58,7 +58,7 @@ export const Sanke = () => {
                     <SnakeGame
                         headImage={headImage}
                         scale={scale}
-                        speed={1.2}
+                        speed={0.6}
                         isReset={isReset}
                         setIsReset={setIsReset} />}
             </Stage>
