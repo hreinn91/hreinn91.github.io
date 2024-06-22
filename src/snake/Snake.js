@@ -5,6 +5,10 @@ import '@pixi/events'; // Needed for Sprite interaction
 import { SnakeSelect } from './SnakeSelect';
 import { SnakeGame } from './SnakeGame';
 
+
+let gameWidth = 500;
+let gameHeight = 500;
+
 export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
     const [isReset, setIsReset] = useState(false);
@@ -55,14 +59,16 @@ export const Snake = () => {
                     Reset
                 </button>
             </div>
-            <Stage width={dimensions.width} height={dimensions.height} options={{ backgroundColor: 0x1d2330 }}>
+            <Stage width={gameWidth} height={gameHeight} options={{ backgroundColor: 0x1d2330 }}>
                 {isSelectMode ? (
                     <SnakeSelect handleStartGame={handleStartGame} />
                 ) : (
                     <SnakeGame
+                        gameWidth={gameWidth}
+                        gameHeight={gameHeight}
                         headImage={headImage}
                         scale={scale}
-                        speed={6}
+                        speed={10}
                         isReset={isReset}
                         setIsReset={setIsReset}
                     />

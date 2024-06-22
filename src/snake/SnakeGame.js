@@ -11,6 +11,8 @@ const initialState = [
 ];
 
 export const SnakeGame = ({
+    gameWidth,
+    gameHeight,
     headImage,
     scale,
     speed,
@@ -30,18 +32,36 @@ export const SnakeGame = ({
     const [direction, setDirection] = useState(directionStates[2]);
     const [applePosition, setApplePosition] = useState([200, 200]);
     const [headQueue, setHeadQueue] = useState(initialState);
+    const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+
+    useTick(delta => {
+        index = index + 1;
+        const now = Date.now();
+        const deltaMillis = (now - lastUpdateTime);
+        if (deltaMillis < 200){
+            return;
+        }
+        setLastUpdateTime(now);
+        
+        if (isReset) {
+            setHeadQueue(initialState);
+            setIsReset(false);
+        }
+        updateHeadQueue();
+    });
+
+    useEffect(() => {
+        document.addEventListener('click', handleMousclick);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('click', handleMousclick);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     const handleMousclick = (e) => {
-        const screenWidth = window.innerWidth;
-        const clickX = e.clientX;
-        if (clickX < screenWidth * 0.42) {
-            cds = (cds + 1) % 4;
-        } else {
-            cds = (cds - 1 + 4) % 4;
-        }
-        //console.log(`${cds}`);
-        let newDirection = directionStates[cds]
-        //console.log(`${newDirection}`)
+        cds = (cds + 1) % 4;
+        let newDirection = directionStates[cds];
         setDirection(newDirection);
     };
 
@@ -61,19 +81,6 @@ export const SnakeGame = ({
         }
     };
 
-    // node.addEventListener('keydown', function(event) {
-    //     const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-    // });
-
-    useEffect(() => {
-        document.addEventListener('click', handleMousclick);
-        document.addEventListener('keydown', handleKeyDown);
-        return () => {
-            document.removeEventListener('click', handleMousclick);
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
     function updateHeadQueue() {
         setHeadQueue(prevQueue => {
             const newQueue = [...prevQueue];
@@ -81,7 +88,6 @@ export const SnakeGame = ({
             const lastPosition = newQueue[newQueue.length - 1];
             for (let i = newQueue.length - 1; i > 0; i--) {
                 newQueue[i] = getNextPos(newQueue[i], newQueue[i - 1]);
-                // newQueue[i] = getNextPosition(newQueue[i], newQueue[i - 1]);
             }
             newQueue[0] = newPosition;
             if (isAppleOverlap(newPosition)) {
@@ -90,6 +96,29 @@ export const SnakeGame = ({
             return newQueue;
         });
     }
+
+    const getNextPos = (pos0, pos1) => {
+        const dist = 10;
+        let x0 = pos0[0];
+        let y0 = pos0[1];
+        let x1 = pos1[0];
+        let y1 = pos1[1];
+        if (x0 == x1) {
+            if (y1 > y0) {
+                return [x1, y1 - dist];
+            } else {
+                return [x1, y1 + dist];
+            }
+        }
+        if(y0 == y1) {
+            if (x1 > x0) {
+                return [x1 - dist, y1];
+            } else {
+                return [x1 + dist, y1];
+            }
+        }
+        return pos1;
+    };
 
     const isAppleOverlap = (headPos) => {
         const dx = applePosition[0] - headPos[0];
@@ -114,47 +143,9 @@ export const SnakeGame = ({
     }
 
     const updateApplePosition = () => {
-        const screenWidth = window.innerWidth;
-        const screenHeigh = window.innerHeight;
-        setApplePosition([screenWidth * Math.random(), screenHeigh * Math.random()]);
+        setApplePosition([randomSpan(10, gameWidth), randomSpan(10, gameHeight)]);
 
     };
-
-    const getNextPos = (pos0, pos1) => {
-        const dist = 20;
-        let x0 = pos0[0];
-        let y0 = pos0[1];
-        let x1 = pos1[0];
-        let y1 = pos1[1];
-        if (x0 == x1) {
-            if (y1 > y0) {
-                return [x1, y1 - dist];
-            } else {
-                return [x1, y1 + dist];
-            }
-        }
-        if(y0 == y1) {
-            if (x1 > x0) {
-                return [x1 - dist, y1];
-            } else {
-                return [x1 + dist, y1];
-            }
-        }
-        return pos1;
-    };
-
-    useTick(delta => {
-        index = index + 1;
-        if(index % 10 != 0){
-            return;
-        }
-        index = index + 1;
-        if (isReset) {
-            setHeadQueue(initialState);
-            setIsReset(false);
-        }
-        updateHeadQueue();
-    });
 
     return (
         <>
@@ -183,3 +174,5 @@ export const SnakeGame = ({
 const sub = (v1, v2) => {
     return [v1[0] - v2[0], v1[1] - v2[1]];
 }
+
+const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };

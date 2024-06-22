@@ -21,11 +21,11 @@ export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame, isFl
                 eventMode={'static'}
                 onclick={handleOnClick}
                 image={headImage}
-                scale={[isFlipped * scale, scale]}
+                scale={[isFlipped * scale * 2, scale * 2]}
                 rotation={angle}
                 x={xPos}
                 y={yPos}
-                anchor={0.5} />
+                anchor={0.4} />
         </>
     );
 };
@@ -38,14 +38,14 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 headImage={freddyImage}
                 xPos={100}
                 yPos={100}
-                scale={0.5}
+                scale={0.4}
                 isFlipped={1}
                 handleStartGame={handleStartGame}
             />
             <SelectHead
                 headImage={tobbeImage}
-                xPos={200}
-                yPos={200}
+                xPos={250}
+                yPos={250}
                 scale={0.2}
                 isFlipped={-1}
                 handleStartGame={handleStartGame}
