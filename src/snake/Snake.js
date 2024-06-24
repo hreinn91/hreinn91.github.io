@@ -15,14 +15,19 @@ export const Snake = () => {
     const [headerText, setHeaderText] = useState("Choose your character");
     const [scale, setScale] = useState(1);
     const [headImage, setHeadImage] = useState(null);
+    const [appleImage, setAppleImage] = useState(null);
+    const [deadImage, setDeadImage] = useState(null);
     const [dimensions, setDimensions] = useState({
         width: window.innerWidth,
         height: window.innerHeight
     });
 
-    const handleStartGame = (image, selectedScale) => {
+    const handleStartGame = (image, appleImg, deadImg, selectedScale) => {
         setHeadImage(image);
+        /* setDeadImage() */
         setScale(selectedScale);
+        setAppleImage(appleImg);
+        setDeadImage(deadImg);
         setIsSelectMode(false);
         setHeaderText("Your Game is Running");
     };
@@ -67,6 +72,8 @@ export const Snake = () => {
                         gameWidth={gameWidth}
                         gameHeight={gameHeight}
                         headImage={headImage}
+                        appleImage={appleImage}
+                        deadImage={deadImage}
                         scale={scale}
                         speed={10}
                         isReset={isReset}

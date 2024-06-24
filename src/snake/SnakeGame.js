@@ -14,6 +14,8 @@ export const SnakeGame = ({
     gameWidth,
     gameHeight,
     headImage,
+    appleImage,
+    deadImage,
     scale,
     speed,
     isReset,
@@ -27,6 +29,7 @@ export const SnakeGame = ({
         [0, 1]
     ];
 
+    const [isDead, setIsDead] = useState(false);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
     const [headDirection, setHeadDirection] = useState(directionStates[2]);
@@ -35,6 +38,9 @@ export const SnakeGame = ({
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
     useTick(delta => {
+        if(isDead){
+            return;
+        }
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
@@ -112,7 +118,7 @@ export const SnakeGame = ({
     return (
         <>
             <Sprite
-                image={BagImage}
+                image={appleImage}
                 scale={[0.04, 0.04]}
                 rotation={0}
                 x={applePosition[0]}

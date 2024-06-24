@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Sprite, useTick } from '@pixi/react';
 import freddyImage from '../assets/bosshead.png';
 import tobbeImage from '../assets/jimmy-tobbesson-head.png';
+import aquaslashIamge from '../assets/aquaslash.png';
+import 
 
-export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame, isFlipped }) => {
+export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale, handleStartGame, isFlipped }) => {
     const [angle, setAngle] = useState(0);
 
     useTick(delta => {
@@ -11,7 +13,7 @@ export const SelectHead = ({ headImage, xPos, yPos, scale, handleStartGame, isFl
     });
 
     const handleOnClick = () => {
-        handleStartGame(headImage, scale);
+        handleStartGame(headImage, appleImage, deadImage scale);
     };
 
     return (
