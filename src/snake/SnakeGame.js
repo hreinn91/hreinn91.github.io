@@ -21,15 +21,15 @@ export const SnakeGame = ({
 }) => {
 
     const directionStates = [
-        [speed, 0],
-        [0, -1 * speed],
-        [-1 * speed, 0],
-        [0, speed]
+        [1, 0],
+        [0, -1],
+        [-1, 0],
+        [0, 1]
     ];
 
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
-    const [direction, setDirection] = useState(directionStates[2]);
+    const [headDirection, setHeadDirection] = useState(directionStates[2]);
     const [applePosition, setApplePosition] = useState([200, 200]);
     const [headQueue, setHeadQueue] = useState(initialState);
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
@@ -38,16 +38,16 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 200){
+        if (deltaMillis < 200) {
             return;
         }
         setLastUpdateTime(now);
-        
+
         if (isReset) {
             setHeadQueue(initialState);
             setIsReset(false);
         }
-        updateHeadQueue();
+        setHeadQueue(getNextQueue(headQueue, headDirection));
     });
 
     useEffect(() => {
@@ -62,64 +62,38 @@ export const SnakeGame = ({
     const handleMousclick = (e) => {
         cds = (cds + 1) % 4;
         let newDirection = directionStates[cds];
-        setDirection(newDirection);
+        setHeadDirection(newDirection);
     };
 
     const handleKeyDown = (e) => {
         const key = e.key;
         if (key === "ArrowRight") {
-            setDirection([speed, 0]);
+            setHeadDirection([1, 0]);
         }
         if (key === "ArrowLeft") {
-            setDirection([-1 * speed, 0]);
+            setHeadDirection([-1, 0]);
         }
         if (key === "ArrowUp") {
-            setDirection([0, -1 * speed]);
+            setHeadDirection([0, -1]);
         }
         if (key === "ArrowDown") {
-            setDirection([0, speed]);
+            setHeadDirection([0, 1]);
         }
     };
 
-    function updateHeadQueue() {
-        setHeadQueue(prevQueue => {
-            const newQueue = [...prevQueue];
-            const newPosition = [headQueue[0][0] + direction[0], headQueue[0][1] + direction[1]];
-            const lastPosition = newQueue[newQueue.length - 1];
-            for (let i = newQueue.length - 1; i > 0; i--) {
-                newQueue[i] = getNextPos(newQueue[i], newQueue[i - 1]);
-            }
-            newQueue[0] = newPosition;
-            if (isAppleOverlap(newPosition)) {
-                addNewHead(newQueue, lastPosition);
-            }
-            return newQueue;
-        });
+    const getNextQueue = (oldQueue, direction) => {
+        const step = 35;
+        const newQueue = [...oldQueue];
+        const newPosition = [oldQueue[0][0] + direction[0] * step, oldQueue[0][1] + direction[1] * step];
+        newQueue.unshift(newPosition);
+        if (!isAppleOverlap(newPosition)) {
+            newQueue.pop();
+        } else {
+            updateApplePosition()
+        }
+        return newQueue;
     }
-
-    const getNextPos = (pos0, pos1) => {
-        const dist = 10;
-        let x0 = pos0[0];
-        let y0 = pos0[1];
-        let x1 = pos1[0];
-        let y1 = pos1[1];
-        if (x0 == x1) {
-            if (y1 > y0) {
-                return [x1, y1 - dist];
-            } else {
-                return [x1, y1 + dist];
-            }
-        }
-        if(y0 == y1) {
-            if (x1 > x0) {
-                return [x1 - dist, y1];
-            } else {
-                return [x1 + dist, y1];
-            }
-        }
-        return pos1;
-    };
-
+    
     const isAppleOverlap = (headPos) => {
         const dx = applePosition[0] - headPos[0];
         const dy = applePosition[1] - headPos[1];
@@ -128,18 +102,6 @@ export const SnakeGame = ({
             return true;
         }
         return false;
-    }
-
-    const addNewHead = (newQueue, lastPosition) => {
-        console.log(`EAT EAT EAT APPLE`);
-        if (newQueue.length == 1) {
-            let headPos = newQueue[0];
-            let newHeadPosition = sub(headPos, direction);
-            newQueue.push(newHeadPosition);
-        } else {
-            newQueue.push(lastPosition);
-        }
-        updateApplePosition();
     }
 
     const updateApplePosition = () => {
@@ -157,14 +119,14 @@ export const SnakeGame = ({
                 y={applePosition[1]}
                 anchor={0.5}
             />
-            {headQueue.map((head, index) => (
+            {headQueue.slice().reverse().map((headPosition, index) => (
                 <Sprite
                     key={index}
                     image={headImage}
                     scale={[isFlipped * scale * 0.5, scale * 0.5]}
                     rotation={angle}
-                    x={head[0]}
-                    y={head[1]}
+                    x={headPosition[0]}
+                    y={headPosition[1]}
                     anchor={0.5} />
             ))}
         </>
@@ -176,3 +138,4 @@ const sub = (v1, v2) => {
 }
 
 const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };
+const last = (arr) => { return arr[arr.length - 1]; }
