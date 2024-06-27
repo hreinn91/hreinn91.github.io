@@ -6,8 +6,8 @@ import { SnakeSelect } from './SnakeSelect';
 import { SnakeGame } from './SnakeGame';
 
 
-let gameWidth = 500;
-let gameHeight = 500;
+let gameWidth = 700;
+let gameHeight = 700;
 
 export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
@@ -22,8 +22,8 @@ export const Snake = () => {
         height: window.innerHeight
     });
 
-    const handleStartGame = (image, appleImg, deadImg, selectedScale) => {
-        setHeadImage(image);
+    const handleStartGame = (headImage, appleImg, deadImg, selectedScale) => {
+        setHeadImage(headImage);
         /* setDeadImage() */
         setScale(selectedScale);
         setAppleImage(appleImg);

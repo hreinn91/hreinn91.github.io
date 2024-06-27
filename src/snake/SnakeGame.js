@@ -29,6 +29,7 @@ export const SnakeGame = ({
         [0, 1]
     ];
 
+    const [headImg, setHeadImage] = useState(headImage);
     const [isDead, setIsDead] = useState(false);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
@@ -48,10 +49,8 @@ export const SnakeGame = ({
             return;
         }
         setLastUpdateTime(now);
-
-        if (isReset) {
-            setHeadQueue(initialState);
-            setIsReset(false);
+        if(checkAndSetDead()) {
+            return;
         }
         setHeadQueue(getNextQueue(headQueue, headDirection));
     });
@@ -87,8 +86,21 @@ export const SnakeGame = ({
         }
     };
 
+    const checkAndSetDead = () => {
+        const headPos = headQueue[0];
+        for(let i=1; i<headQueue.length; i++){
+            let pos = headQueue[i];
+            if(headPos[0] == pos[0] && headPos[1] == pos[1]){
+                setIsDead(true);
+                setHeadImage(deadImage);
+                return true;
+            }
+        }
+        return false;
+    }
+
     const getNextQueue = (oldQueue, direction) => {
-        const step = 35;
+        const step = 45;
         const newQueue = [...oldQueue];
         const newPosition = [oldQueue[0][0] + direction[0] * step, oldQueue[0][1] + direction[1] * step];
         newQueue.unshift(newPosition);
@@ -104,7 +116,7 @@ export const SnakeGame = ({
         const dx = applePosition[0] - headPos[0];
         const dy = applePosition[1] - headPos[1];
         const norm = Math.sqrt(dx * dx + dy * dy);
-        if (norm < 20) {
+        if (norm < 40) {
             return true;
         }
         return false;
@@ -119,7 +131,7 @@ export const SnakeGame = ({
         <>
             <Sprite
                 image={appleImage}
-                scale={[0.04, 0.04]}
+                scale={[0.1, 0.1]}
                 rotation={0}
                 x={applePosition[0]}
                 y={applePosition[1]}
@@ -128,7 +140,7 @@ export const SnakeGame = ({
             {headQueue.slice().reverse().map((headPosition, index) => (
                 <Sprite
                     key={index}
-                    image={headImage}
+                    image={headImg}
                     scale={[isFlipped * scale * 0.5, scale * 0.5]}
                     rotation={angle}
                     x={headPosition[0]}

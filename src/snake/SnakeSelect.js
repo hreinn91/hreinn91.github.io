@@ -3,7 +3,10 @@ import { Sprite, useTick } from '@pixi/react';
 import freddyImage from '../assets/bosshead.png';
 import tobbeImage from '../assets/jimmy-tobbesson-head.png';
 import aquaslashIamge from '../assets/aquaslash.png';
-import 
+import moneyImage from '../assets/money.png';
+import deadFreddy from '../assets/sleepy-freddy.png';
+import deadTobbe from '../assets/tobbe-what.png'
+
 
 export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale, handleStartGame, isFlipped }) => {
     const [angle, setAngle] = useState(0);
@@ -13,7 +16,7 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
     });
 
     const handleOnClick = () => {
-        handleStartGame(headImage, appleImage, deadImage scale);
+        handleStartGame(headImage, appleImage, deadImage, scale);
     };
 
     return (
@@ -23,7 +26,7 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
                 eventMode={'static'}
                 onclick={handleOnClick}
                 image={headImage}
-                scale={[isFlipped * scale * 1.5, scale * 1.5]}
+                scale={[isFlipped * scale, scale]}
                 rotation={angle}
                 x={xPos}
                 y={yPos}
@@ -38,17 +41,21 @@ export const SnakeSelect = ({ handleStartGame }) => {
         <>
             <SelectHead
                 headImage={freddyImage}
+                deadImage={deadFreddy}
+                appleImage={moneyImage}
                 xPos={100}
                 yPos={100}
-                scale={0.6}
+                scale={0.8}
                 isFlipped={1}
                 handleStartGame={handleStartGame}
             />
             <SelectHead
                 headImage={tobbeImage}
+                deadImage={deadTobbe}
+                appleImage={aquaslashIamge}
                 xPos={250}
                 yPos={250}
-                scale={0.35}
+                scale={0.4}
                 isFlipped={-1}
                 handleStartGame={handleStartGame}
             />
