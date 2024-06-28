@@ -15,7 +15,9 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
         setAngle(angle + 2 * Math.PI / 120);
     });
 
-    const handleOnClick = () => {
+    const handleOnClick = (event) => {
+        event.stopPropagation();
+        console.log("Click");
         handleStartGame(headImage, appleImage, deadImage, scale);
     };
 
@@ -24,7 +26,7 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
             <Sprite
                 interactive={true}
                 eventMode={'static'}
-                onclick={handleOnClick}
+                pointerdown={handleOnClick}
                 image={headImage}
                 scale={[isFlipped * scale, scale]}
                 rotation={angle}

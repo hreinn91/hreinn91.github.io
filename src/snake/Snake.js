@@ -55,7 +55,7 @@ export const Snake = () => {
     }, [isReset]);
 
     return (
-        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: 'black' }}>
+        <div style={{ width: '100vw', height: '100vh', backgroundColor: 'black' }}>
             <div className='header-container'>
                 {headerText}
             </div>
