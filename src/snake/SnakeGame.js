@@ -4,7 +4,6 @@ import BagImage from '../assets/coke.png';
 
 let index = 0;
 let cds = 0;
-const headDistance = 30;
 
 const initialState = [
     [180, 190],
@@ -41,7 +40,7 @@ export const SnakeGame = ({
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
     useTick(delta => {
-        if(isDead){
+        if (isDead) {
             return;
         }
         index = index + 1;
@@ -51,7 +50,7 @@ export const SnakeGame = ({
             return;
         }
         setLastUpdateTime(now);
-        if(checkAndSetDead()) {
+        if (checkAndSetDead()) {
             return;
         }
         setHeadQueue(getNextQueue(headQueue, headDirection));
@@ -90,9 +89,9 @@ export const SnakeGame = ({
 
     const checkAndSetDead = () => {
         const headPos = headQueue[0];
-        for(let i=1; i<headQueue.length; i++){
+        for (let i = 1; i < headQueue.length; i++) {
             let pos = headQueue[i];
-            if(headPos[0] == pos[0] && headPos[1] == pos[1]){
+            if (headPos[0] == pos[0] && headPos[1] == pos[1]) {
                 setIsDead(true);
                 setHeadImage(deadImage);
                 return true;
@@ -113,7 +112,7 @@ export const SnakeGame = ({
         }
         return newQueue;
     }
-    
+
     const isAppleOverlap = (pos) => {
         const dx = applePosition[0] - pos[0];
         const dy = applePosition[1] - pos[1];
@@ -131,9 +130,8 @@ export const SnakeGame = ({
 
     const newApplePos = (newQueue) => {
         let pos = [randomInterval(15, gameWidth - 15, step), randomInterval(15, gameHeight - 15, step)];
-        let i = 
-        for (let i=1; i<newQueue.length; i++){
-            if(isAppleOverlap(newQueue[i])){
+        for (let i = 1; i < newQueue.length; i++) {
+            if (isAppleOverlap(newQueue[i])) {
                 return newApplePos(newQueue);
             }
         }
@@ -177,3 +175,14 @@ const randomInterval = (min, max, interval) => {
     return res * interval;
 };
 const last = (arr) => { return arr[arr.length - 1]; }
+
+
+const getAllCoords = (xMin, xMax, yMin, yMax, stepSize) =>  {
+    let res = [];
+    for (let y=yMin; y<=yMax; y=y+stepSize){
+        for(let x=xMin; x<=xMax; x=x+stepSize){
+            res.push([x, y]);
+        }
+    }
+    return res;
+}
