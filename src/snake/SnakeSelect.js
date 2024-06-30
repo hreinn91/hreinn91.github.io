@@ -17,7 +17,6 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
 
     const handleOnClick = (event) => {
         event.stopPropagation();
-        console.log("Click");
         handleStartGame(headImage, appleImage, deadImage, scale);
     };
 
@@ -32,12 +31,12 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
                 rotation={angle}
                 x={xPos}
                 y={yPos}
-                anchor={0.4} />
+                anchor={0.5} />
         </>
     );
 };
 
-
+// Slider here
 export const SnakeSelect = ({ handleStartGame }) => {
     return (
         <>
@@ -57,7 +56,7 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 appleImage={aquaslashIamge}
                 xPos={250}
                 yPos={250}
-                scale={0.4}
+                scale={0.35}
                 isFlipped={-1}
                 handleStartGame={handleStartGame}
             />

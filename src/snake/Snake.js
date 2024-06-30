@@ -6,14 +6,15 @@ import { SnakeSelect } from './SnakeSelect';
 import { SnakeGame } from './SnakeGame';
 
 
-let gameWidth = 700;
-let gameHeight = 700;
+let gameWidth = 400;
+let gameHeight = 500;
 
 export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
     const [isReset, setIsReset] = useState(false);
-    const [headerText, setHeaderText] = useState("Choose your character");
+    const [headerText, setHeaderText] = useState("Choose your douchebag");
     const [scale, setScale] = useState(1);
+    const [score, setScore] = useState(0);
     const [headImage, setHeadImage] = useState(null);
     const [appleImage, setAppleImage] = useState(null);
     const [deadImage, setDeadImage] = useState(null);
@@ -29,12 +30,18 @@ export const Snake = () => {
         setAppleImage(appleImg);
         setDeadImage(deadImg);
         setIsSelectMode(false);
-        setHeaderText("Your Game is Running");
+        setHeaderText("Score: 0");
     };
 
     const handleButtonClick = () => {
         setIsReset(true);
     };
+
+    const incrementScore = () => {
+        let newScore = score + 1;
+        setScore(newScore);
+        setHeaderText(`Score: ${newScore}`);
+    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -55,7 +62,7 @@ export const Snake = () => {
     }, [isReset]);
 
     return (
-        <div style={{ width: '100vw', height: '100vh', backgroundColor: 'black' }}>
+        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: 'black' }}>
             <div className='header-container'>
                 {headerText}
             </div>
@@ -78,6 +85,7 @@ export const Snake = () => {
                         speed={10}
                         isReset={isReset}
                         setIsReset={setIsReset}
+                        incrementScore={incrementScore}
                     />
                 )}
             </Stage>

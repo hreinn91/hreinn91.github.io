@@ -7,7 +7,7 @@ let cds = 0;
 const headDistance = 30;
 
 const initialState = [
-    [150, 200],
+    [180, 190],
 ];
 
 export const SnakeGame = ({
@@ -20,6 +20,7 @@ export const SnakeGame = ({
     speed,
     isReset,
     setIsReset,
+    incrementScore,
 }) => {
 
     const directionStates = [
@@ -29,6 +30,7 @@ export const SnakeGame = ({
         [0, 1]
     ];
 
+    const [step, setStep] = useState(40);
     const [headImg, setHeadImage] = useState(headImage);
     const [isDead, setIsDead] = useState(false);
     const [isFlipped, setIsFlipped] = useState(-1);
@@ -45,7 +47,7 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 200) {
+        if (deltaMillis < 100) {
             return;
         }
         setLastUpdateTime(now);
@@ -100,21 +102,21 @@ export const SnakeGame = ({
     }
 
     const getNextQueue = (oldQueue, direction) => {
-        const step = 45;
         const newQueue = [...oldQueue];
         const newPosition = [oldQueue[0][0] + direction[0] * step, oldQueue[0][1] + direction[1] * step];
         newQueue.unshift(newPosition);
         if (!isAppleOverlap(newPosition)) {
             newQueue.pop();
         } else {
-            updateApplePosition()
+            updateApplePosition(newQueue);
+            incrementScore();
         }
         return newQueue;
     }
     
-    const isAppleOverlap = (headPos) => {
-        const dx = applePosition[0] - headPos[0];
-        const dy = applePosition[1] - headPos[1];
+    const isAppleOverlap = (pos) => {
+        const dx = applePosition[0] - pos[0];
+        const dy = applePosition[1] - pos[1];
         const norm = Math.sqrt(dx * dx + dy * dy);
         if (norm < 40) {
             return true;
@@ -122,9 +124,20 @@ export const SnakeGame = ({
         return false;
     }
 
-    const updateApplePosition = () => {
-        setApplePosition([randomSpan(10, gameWidth), randomSpan(10, gameHeight)]);
+    const updateApplePosition = (newQueue) => {
+        let applePosition = newApplePos(newQueue);
+        setApplePosition(applePosition);
+    };
 
+    const newApplePos = (newQueue) => {
+        let pos = [randomInterval(15, gameWidth - 15, step), randomInterval(15, gameHeight - 15, step)];
+        let i = 
+        for (let i=1; i<newQueue.length; i++){
+            if(isAppleOverlap(newQueue[i])){
+                return newApplePos(newQueue);
+            }
+        }
+        return pos;
     };
 
     return (
@@ -156,4 +169,11 @@ const sub = (v1, v2) => {
 }
 
 const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };
+const randomInterval = (min, max, interval) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    let res = Math.floor(Math.random() * (max - min + 1)) + min;
+    res = Math.ceil(res / interval) - 1;
+    return res * interval;
+};
 const last = (arr) => { return arr[arr.length - 1]; }
