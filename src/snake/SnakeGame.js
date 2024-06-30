@@ -4,10 +4,7 @@ import BagImage from '../assets/coke.png';
 
 let index = 0;
 let cds = 0;
-
-const initialState = [
-    [180, 190],
-];
+const step = 40;
 
 export const SnakeGame = ({
     gameWidth,
@@ -29,14 +26,18 @@ export const SnakeGame = ({
         [0, 1]
     ];
 
-    const [step, setStep] = useState(40);
+    const allCoords = getAllCoords(20, gameWidth - 20, 10, gameHeight - 10, step);
+    const Nx = (gameWidth - 40) / step + 1;
+    const Ny = (gameHeight - 20) / step + 1;
+    const occupiedCoordinates = [Math.floor(allCoords.length / 2)];
+
     const [headImg, setHeadImage] = useState(headImage);
     const [isDead, setIsDead] = useState(false);
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
-    const [headDirection, setHeadDirection] = useState(directionStates[2]);
-    const [applePosition, setApplePosition] = useState([200, 200]);
-    const [headQueue, setHeadQueue] = useState(initialState);
+    const [headDirection, setHeadDirection] = useState(directionStates[3]);
+    const [applePosition, setApplePosition] = useState([Math.floor(allCoords.length / 4)]);
+    const [headQueue, setHeadQueue] = useState([Math.floor(allCoords.length / 1.5)]);
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
     useTick(delta => {
@@ -46,7 +47,7 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 100) {
+        if (deltaMillis < 200) {
             return;
         }
         setLastUpdateTime(now);
@@ -91,18 +92,26 @@ export const SnakeGame = ({
         const headPos = headQueue[0];
         for (let i = 1; i < headQueue.length; i++) {
             let pos = headQueue[i];
-            if (headPos[0] == pos[0] && headPos[1] == pos[1]) {
-                setIsDead(true);
-                setHeadImage(deadImage);
+            if (headPos == pos) {
+                setDead();
                 return true;
             }
         }
         return false;
     }
 
+    const setDead = () => {
+        setIsDead(true);
+        setHeadImage(deadImage);
+    };
+
     const getNextQueue = (oldQueue, direction) => {
         const newQueue = [...oldQueue];
-        const newPosition = [oldQueue[0][0] + direction[0] * step, oldQueue[0][1] + direction[1] * step];
+        const newPosition = oldQueue[0] + direction[0] + direction[1] * Nx;
+        if(newPosition >= allCoords.length  || newPosition < 0){
+            setDead();
+            return oldQueue;
+        }
         newQueue.unshift(newPosition);
         if (!isAppleOverlap(newPosition)) {
             newQueue.pop();
@@ -113,9 +122,13 @@ export const SnakeGame = ({
         return newQueue;
     }
 
+    const newPosition = (head, direction) => {
+
+    }
+
     const isAppleOverlap = (pos) => {
-        const dx = applePosition[0] - pos[0];
-        const dy = applePosition[1] - pos[1];
+        const dx = allCoords[applePosition][0] - allCoords[pos][0];
+        const dy = allCoords[applePosition][1] - allCoords[pos][1];
         const norm = Math.sqrt(dx * dx + dy * dy);
         if (norm < 40) {
             return true;
@@ -129,12 +142,7 @@ export const SnakeGame = ({
     };
 
     const newApplePos = (newQueue) => {
-        let pos = [randomInterval(15, gameWidth - 15, step), randomInterval(15, gameHeight - 15, step)];
-        for (let i = 1; i < newQueue.length; i++) {
-            if (isAppleOverlap(newQueue[i])) {
-                return newApplePos(newQueue);
-            }
-        }
+        let pos = Math.floor(allCoords.length * Math.random());
         return pos;
     };
 
@@ -144,8 +152,8 @@ export const SnakeGame = ({
                 image={appleImage}
                 scale={[0.1, 0.1]}
                 rotation={0}
-                x={applePosition[0]}
-                y={applePosition[1]}
+                x={allCoords[applePosition][0]}
+                y={allCoords[applePosition][1]}
                 anchor={0.5}
             />
             {headQueue.slice().reverse().map((headPosition, index) => (
@@ -154,8 +162,8 @@ export const SnakeGame = ({
                     image={headImg}
                     scale={[isFlipped * scale * 0.5, scale * 0.5]}
                     rotation={angle}
-                    x={headPosition[0]}
-                    y={headPosition[1]}
+                    x={allCoords[headPosition][0]}
+                    y={allCoords[headPosition][1]}
                     anchor={0.5} />
             ))}
         </>
@@ -167,6 +175,7 @@ const sub = (v1, v2) => {
 }
 
 const randomSpan = (lower, upper) => { return lower + (upper - lower) * Math.random(); };
+
 const randomInterval = (min, max, interval) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -177,10 +186,10 @@ const randomInterval = (min, max, interval) => {
 const last = (arr) => { return arr[arr.length - 1]; }
 
 
-const getAllCoords = (xMin, xMax, yMin, yMax, stepSize) =>  {
+const getAllCoords = (xMin, xMax, yMin, yMax, stepSize) => {
     let res = [];
-    for (let y=yMin; y<=yMax; y=y+stepSize){
-        for(let x=xMin; x<=xMax; x=x+stepSize){
+    for (let y = yMin; y <= yMax; y = y + stepSize) {
+        for (let x = xMin; x <= xMax; x = x + stepSize) {
             res.push([x, y]);
         }
     }

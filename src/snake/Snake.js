@@ -6,8 +6,8 @@ import { SnakeSelect } from './SnakeSelect';
 import { SnakeGame } from './SnakeGame';
 
 
-let gameWidth = 400;
-let gameHeight = 500;
+let gameWidth = 440;
+let gameHeight = 540;
 
 export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
