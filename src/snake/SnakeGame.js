@@ -26,7 +26,7 @@ export const SnakeGame = ({
         [0, 1]
     ];
 
-    const allCoords = getAllCoords(20, gameWidth - 20, 10, gameHeight - 10, step);
+    const allCoords = getAllCoords(20, gameWidth - 20, 20, gameHeight - 20, step);
     const Nx = (gameWidth - 40) / step + 1;
     const Ny = (gameHeight - 20) / step + 1;
     const occupiedCoordinates = [Math.floor(allCoords.length / 2)];
@@ -108,7 +108,7 @@ export const SnakeGame = ({
     const getNextQueue = (oldQueue, direction) => {
         const newQueue = [...oldQueue];
         const newPosition = oldQueue[0] + direction[0] + direction[1] * Nx;
-        if(newPosition >= allCoords.length  || newPosition < 0){
+        if(isOutofBounds(newPosition, oldQueue[0], direction)){
             setDead();
             return oldQueue;
         }
@@ -122,8 +122,9 @@ export const SnakeGame = ({
         return newQueue;
     }
 
-    const newPosition = (head, direction) => {
-
+    const isOutofBounds = (newPosition, head, direction) => {
+        return newPosition >= allCoords.length  || newPosition < 0 || 
+        (direction[0] == -1 && head%Nx == 0) || (direction[0] == 1 && head%Nx == Nx - 1); 
     }
 
     const isAppleOverlap = (pos) => {
