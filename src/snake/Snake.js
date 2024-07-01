@@ -12,6 +12,7 @@ let gameHeight = 480;
 export const Snake = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
     const [isReset, setIsReset] = useState(false);
+    const [gameState, setGameState] = useState(0);
     const [headerText, setHeaderText] = useState("Choose your douchebag");
     const [scale, setScale] = useState(1);
     const [score, setScore] = useState(0);
@@ -65,11 +66,6 @@ export const Snake = () => {
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: 'black' }}>
             <div className='header-container'>
                 {headerText}
-            </div>
-            <div className='header-container'>
-                <button onClick={handleButtonClick}>
-                    Reset
-                </button>
             </div>
             <Stage width={gameWidth} height={gameHeight} options={{ backgroundColor: 0x1d2330 }}>
                 {isSelectMode ? (

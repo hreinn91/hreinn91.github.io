@@ -36,8 +36,9 @@ export const SnakeGame = ({
     const [isFlipped, setIsFlipped] = useState(-1);
     const [angle, setAngle] = useState(0);
     const [headDirection, setHeadDirection] = useState(directionStates[3]);
-    const [applePosition, setApplePosition] = useState([Math.floor(allCoords.length / 4)]);
-    const [headQueue, setHeadQueue] = useState([Math.floor(allCoords.length / 1.5)]);
+    const headDirectionRef = useRef(headDirection);
+    const [applePosition, setApplePosition] = useState([Math.floor(allCoords.length * 0.3)]);
+    const [headQueue, setHeadQueue] = useState([Math.floor(allCoords.length * 0.62)]);
     const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
     useTick(delta => {
@@ -47,7 +48,7 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 200) {
+        if (deltaMillis < 400) {
             return;
         }
         setLastUpdateTime(now);
@@ -66,6 +67,10 @@ export const SnakeGame = ({
         };
     }, []);
 
+    useEffect(() => {
+        headDirectionRef.current = headDirection;
+    }, [headDirection]);
+
     const handleMousclick = (e) => {
         cds = (cds + 1) % 4;
         let newDirection = directionStates[cds];
@@ -74,16 +79,16 @@ export const SnakeGame = ({
 
     const handleKeyDown = (e) => {
         const key = e.key;
-        if (key === "ArrowRight") {
+        if (key === "ArrowRight" && headDirectionRef.current[0] != -1) {
             setHeadDirection([1, 0]);
         }
-        if (key === "ArrowLeft") {
+        if (key === "ArrowLeft" && headDirectionRef.current[0] != 1) {
             setHeadDirection([-1, 0]);
         }
-        if (key === "ArrowUp") {
+        if (key === "ArrowUp" && headDirectionRef.current[1] != 1) {
             setHeadDirection([0, -1]);
         }
-        if (key === "ArrowDown") {
+        if (key === "ArrowDown" && headDirectionRef.current[1] != -1) {
             setHeadDirection([0, 1]);
         }
     };
