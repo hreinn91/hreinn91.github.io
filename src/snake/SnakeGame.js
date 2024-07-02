@@ -48,7 +48,7 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 400) {
+        if (deltaMillis < 200) {
             return;
         }
         setLastUpdateTime(now);
