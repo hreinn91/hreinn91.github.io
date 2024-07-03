@@ -48,7 +48,7 @@ const textMap = ["SLOW", "MEH", "FAST", "HARD", "FUCK", "LOL"];
 
 export const SelectSpeed = ({ setGameSpeed }) => {
     const baseSize = 0.3;
-    const baseSpeed = 400;
+    const baseSpeed = 150;
 
     const [size, setSize] = useState(baseSize);
     const [selectedSpeed, setSelectedSpeed] = useState(baseSpeed);
