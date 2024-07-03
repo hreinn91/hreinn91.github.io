@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sprite, useTick, Text } from '@pixi/react';
 import { TextStyle, BlurFilter } from 'pixi.js';
 import freddyImage from '../assets/bosshead.png';
@@ -8,9 +8,14 @@ import moneyImage from '../assets/money.png';
 import deadFreddy from '../assets/sleepy-freddy.png';
 import deadTobbe from '../assets/tobbe-what.png'
 import ringGrey from '../assets/ring-grey.png'
+import hreinnImage from '../assets/hreinn-russian.png'
+import hreinnDeadImage from '../assets/hreinn-3-head.png'
+import hreinnApple from '../assets/hreinn-apple.png'
 
 
-export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale, handleStartGame, isFlipped }) => {
+
+
+export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale, handleStartGame, isFlipped, displayScale }) => {
     const [angle, setAngle] = useState(0);
 
     useTick(delta => {
@@ -19,7 +24,7 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
 
     const handleOnClick = (event) => {
         event.stopPropagation();
-        handleStartGame(headImage, appleImage, deadImage, scale);
+        handleStartGame(headImage, appleImage, deadImage, displayScale);
     };
 
     return (
@@ -41,27 +46,38 @@ export const SelectHead = ({ headImage, deadImage, appleImage, xPos, yPos, scale
 let tmi = 0;
 const textMap = ["SLOW", "MEH", "FAST", "HARD", "FUCK", "LOL"];
 
-export const SelectSpeed = ({ }) => {
+export const SelectSpeed = ({ setGameSpeed }) => {
     const baseSize = 0.3;
+    const baseSpeed = 400;
 
     const [size, setSize] = useState(baseSize);
-    const [speed, setSpeed] = useState(200);
-    
+    const [selectedSpeed, setSelectedSpeed] = useState(baseSpeed);
+
+    useEffect(() => {
+        setGameSpeed(baseSpeed);
+    }, []);
+
+
+
     const handleOnPointDown = (event) => {
         console.log(`Click`);
-        tmi = (tmi+1) % 6;
+        tmi = (tmi + 1) % 6;
         let newSize = size * 1.2;
-        if(newSize > 0.8) {
+        let newSpeed = selectedSpeed * 0.75;
+        if (tmi == 0) {
             newSize = baseSize;
+            newSpeed = baseSpeed;
         }
         setSize(newSize);
+        setSelectedSpeed(newSpeed);
+        setGameSpeed(newSpeed);
     };
 
     return (
         <>
             <Sprite
-            interactive={true}
-            eventMode={'static'}
+                interactive={true}
+                eventMode={'static'}
                 image={ringGrey}
                 pointerdown={handleOnPointDown}
                 scale={size}
@@ -91,16 +107,17 @@ export const SelectSpeed = ({ }) => {
     );
 };
 
-export const SnakeSelect = ({ handleStartGame }) => {
+export const SnakeSelect = ({ handleStartGame, setSpeed }) => {
     return (
         <>
-            <SelectSpeed />
+            <SelectSpeed setGameSpeed={setSpeed} />
             <SelectHead
                 headImage={freddyImage}
                 deadImage={deadFreddy}
                 appleImage={moneyImage}
                 xPos={100}
                 yPos={100}
+                displayScale={0.8}
                 scale={0.8}
                 isFlipped={1}
                 handleStartGame={handleStartGame}
@@ -111,7 +128,19 @@ export const SnakeSelect = ({ handleStartGame }) => {
                 appleImage={aquaslashIamge}
                 xPos={280}
                 yPos={110}
+                displayScale={0.35}
                 scale={0.35}
+                isFlipped={-1}
+                handleStartGame={handleStartGame}
+            />
+            <SelectHead
+                headImage={hreinnImage}
+                deadImage={hreinnDeadImage}
+                appleImage={hreinnApple}
+                xPos={60}
+                yPos={280}
+                displayScale={0.35}
+                scale={0.04}
                 isFlipped={-1}
                 handleStartGame={handleStartGame}
             />

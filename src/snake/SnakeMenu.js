@@ -9,12 +9,13 @@ import { SnakeGame } from './SnakeGame';
 let gameWidth = 400;
 let gameHeight = 480;
 
-export const Snake = () => {
+export const SnakeMenu = () => {
     const [isSelectMode, setIsSelectMode] = useState(true);
     const [isReset, setIsReset] = useState(false);
     const [gameState, setGameState] = useState(0);
     const [headerText, setHeaderText] = useState("Choose your douchebag");
     const [scale, setScale] = useState(1);
+    const [speed, setSpeed] = useState(200);
     const [score, setScore] = useState(0);
     const [headImage, setHeadImage] = useState(null);
     const [appleImage, setAppleImage] = useState(null);
@@ -69,7 +70,7 @@ export const Snake = () => {
             </div>
             <Stage width={gameWidth} height={gameHeight} options={{ backgroundColor: 0x1d2330 }}>
                 {isSelectMode ? (
-                    <SnakeSelect handleStartGame={handleStartGame} />
+                    <SnakeSelect handleStartGame={handleStartGame} setSpeed={setSpeed} />
                 ) : (
                     <SnakeGame
                         gameWidth={gameWidth}
@@ -78,7 +79,7 @@ export const Snake = () => {
                         appleImage={appleImage}
                         deadImage={deadImage}
                         scale={scale}
-                        speed={10}
+                        speed={speed}
                         isReset={isReset}
                         setIsReset={setIsReset}
                         incrementScore={incrementScore}
@@ -89,4 +90,4 @@ export const Snake = () => {
     );
 };
 
-export default Snake;
+export default SnakeMenu;

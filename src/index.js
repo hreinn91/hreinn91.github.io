@@ -7,7 +7,7 @@ import {
 import './index.css';
 import App from './mainpage/App';
 import BeerSpace from './beerspace/BeerSpace';
-import Sanke from './snake/Snake';
+import SankeMenu from './snake/SnakeMenu';
 import reportWebVitals from './reportWebVitals';
 
 const router = createHashRouter([
@@ -28,7 +28,7 @@ const router = createHashRouter([
   },
   {
     path: "/snake",
-    element: <Sanke />
+    element: <SankeMenu />
   },
 ]);
 

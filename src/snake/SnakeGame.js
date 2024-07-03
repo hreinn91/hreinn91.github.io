@@ -48,7 +48,7 @@ export const SnakeGame = ({
         index = index + 1;
         const now = Date.now();
         const deltaMillis = (now - lastUpdateTime);
-        if (deltaMillis < 200) {
+        if (deltaMillis < speed) {
             return;
         }
         setLastUpdateTime(now);
@@ -143,13 +143,14 @@ export const SnakeGame = ({
     }
 
     const updateApplePosition = (newQueue) => {
-        let applePosition = newApplePos(newQueue);
+        const possibleApplePositions = [...allCoords.keys()].filter(c => !newQueue.includes(c));
+        let applePosition = newApplePos(possibleApplePositions);
         setApplePosition(applePosition);
     };
 
-    const newApplePos = (newQueue) => {
-        let pos = Math.floor(allCoords.length * Math.random());
-        return pos;
+    const newApplePos = (possibleApplePositions) => {
+        let index = Math.floor(possibleApplePositions.length * Math.random());
+        return possibleApplePositions[index];
     };
 
     return (
